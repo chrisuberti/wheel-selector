@@ -1,5 +1,5 @@
 <?php
-class Constants{
+//class Constants{
 
 //List of constants that can be used throughout the program
 $grav = 9.8067; //m/s
@@ -40,6 +40,6 @@ function densityCalc($Tair, $humidity, $alt){
 
 
 
-}
+
 
 ?>
