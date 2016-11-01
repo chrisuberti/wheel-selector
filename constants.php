@@ -13,7 +13,7 @@ $P_sl = 101.33; //Sea Level standard pressure kPa
 
 
 //convert meters to feet;
-function feet2meters($ft){return 3.2808*$ft;}
+function feet2meters($ft){return $ft*0.3048;}
 
 //convert celcius to farienheight
 function celcius2farienheight($cel){return 1.8*$cel+32;}
@@ -27,12 +27,17 @@ function TotalMass($rider, $bike){return $bike+$rider;}
 function densityCalc($Tair, $humidity, $alt){
 	global $grav, $MMair, $R_air, $TempLapse, $T_sl, $P_sl;
 	$t_rank = fariengheight2kelvin($Tair);
-	$P_sat = pow(M_E, (77.345+0.0057*$t_rank-7235/$t_rank))/pow($t_rank,8.2);
-	$P_dry =$P_sl*pow((1-($TempLapse* feet2meters($alt))/288.15), ($grav/($R_air*$TempLapse)));
-	$rho_dry = (($P_dry*1000)/$R_air*$t_rank);
+	//Saturation pressure of wator vapor in air
+	$P_sat = exp((77.345+0.0057*$t_rank-7235/$t_rank))/pow($t_rank,8.2);
+	//Density of water in air (with humidity factored in)
+	$rho_wet = (0.0022*$P_sat/$t_rank)*$humidity;
+	//Calculate Pressure of dry air only (no dilution of pressure due to water vapor in ari)
+	$P_dry =$P_sl*pow((1-($TempLapse* feet2meters($alt))/$T_sl), ($grav/($R_air*$TempLapse)));
+	$rho_dry = (($P_dry*1000)/($R_air*$t_rank));
 	//Density of water vapor in air
-	$rho_wet = (0.0022*$P_sat/$P_dry) * ($humidity/100);
 	$x = $rho_wet/$rho_dry; 
+	
+	//Full actual density of air with water vapor
 	$rho_actual = $rho_dry *((1+$x)/(1+1.609*$x));//This is some empherical ratio to determine actual density based on humidity ratio
 
 	return $rho_actual;
