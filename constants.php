@@ -62,27 +62,4 @@ function densityCalc($Tair, $humidity, $alt){
 	return $data;
 }
 
-//function densityCalc($Tair, $humidity, $alt, $P_a){
-//	global $grav, $MMair, $R_air, $TempLapse, $T_sl, $P_sl;
-//	//convert units:
-//	$t_rank = fariengheight2kelvin($Tair);
-//	$P_a = inHg2kPa($P_a);
-//
-//	//populate output table:
-//	$data['P_a']=$P_a;
-//	$data['P_sat']=$P_sat;
-//	$data['P_dry']=$P_dry;
-//	$data['P_vap']=$P_vap;
-//	$data['x']=$x;
-//	$data['rho_dry']=$rho_dry;
-//	$data['rho_actual']=$rho_actual;
-//	
-//	
-//	return $data;
-//}
-
-
-
-
-
 ?>
