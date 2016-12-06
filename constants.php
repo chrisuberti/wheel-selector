@@ -17,7 +17,8 @@ function feet2meters($ft){return $ft*0.3048;}
 
 //
 function inHg2kPa($p){return $p*3.38639;}
-
+ 
+ 
 //convert celcius to farienheight
 function celcius2farienheight($cel){return 1.8*$cel+32;}
 function fariengheight2kelvin($t){return Rankine($t)*0.555556;}
