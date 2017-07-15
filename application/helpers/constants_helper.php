@@ -2,13 +2,13 @@
 //class Constants{
 
 //List of constants that can be used throughout the program
-$grav = 9.8067; //m/s
-$MMair = 28.965; //g-mol-1
-$R_air = 287.06; //J-kg-1 K-1
-$TempLapse = 0.0065; //K/m
-$T_sl = 288.15;
-$P_sl = 101.33; //Sea Level standard pressure kPa
-
+//$grav = 9.8067; //m/s
+//$MMair = 28.965; //g-mol-1
+//$R_air = 287.06; //J-kg-1 K-1
+//$TempLapse = 0.0065; //K/m
+//$T_sl = 288.15;
+//$P_sl = 101.33; //Sea Level standard pressure kPa//
+//
 
 
 
@@ -29,7 +29,6 @@ function Kelvin($c){return $c+273.15;}
 function TotalMass($rider, $bike){return $bike+$rider;}
 
 function densityCalc($Tair, $humidity, $alt){
-	global $grav, $MMair, $R_air, $TempLapse, $T_sl, $P_sl;
 	
 	
 

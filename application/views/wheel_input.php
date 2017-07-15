@@ -8,11 +8,12 @@
     </div>
 
     <div class="row">
+            <?php echo GRAVITY; ?>
             <?php 
             if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
             <?php echo  ($this->session->flashdata('message')); ?>
             
-            <?php echo form_open_multipart('wheels/wheels_calc');?>
+            <?php echo form_open_multipart('wheels/density');?>
             <div class='col-md-4'>
                 <table>
                     <tr><td><h3>Weather Metrics: </h3></td></tr>
@@ -64,6 +65,12 @@
                     <tr>
                          <td><?php echo form_label('Rider Height (inches): ', 'rider_height');?></td>
                          <td><?php echo form_input($rider_height);?></td>
+                    </tr>
+                    <tr>
+                        <td><hr></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo form_submit('wheel_submit', 'Calculate');?></td>
                     </tr>
                 </table>
             </div>

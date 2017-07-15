@@ -74,7 +74,13 @@ class Wheels extends MY_Controller {
 	     $this->load->view('wheel_input', $data);
 	     $this->load->view('dressings/footer');
 	     
+	    
+	     
 	 }
+	 public function density(){
+	 	
+	 }
+	 //Will reassign this to density calculator
 	 public function wheel_calc(){
 	 	
 	 }
