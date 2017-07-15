@@ -2,11 +2,11 @@
 //class Constants{
 
 //List of constants that can be used throughout the program
-//$grav = 9.8067; //m/s
+//GRAVITY = 9.8067; //m/s
 //$MMair = 28.965; //g-mol-1
-//$R_air = 287.06; //J-kg-1 K-1
-//$TempLapse = 0.0065; //K/m
-//$T_sl = 288.15;
+//R_AIR = 287.06; //J-kg-1 K-1
+//TEMP_LAPSE = 0.0065; //K/m
+//T_SEALEVEL = 288.15;
 //$P_sl = 101.33; //Sea Level standard pressure kPa//
 //
 
@@ -34,10 +34,10 @@ function densityCalc($Tair, $humidity, $alt){
 
 	//This only takes into account altitude gain!!!!
 	//Pressure dry 
-	$P_dry =$P_sl*pow((1-($TempLapse* feet2meters($alt))/$T_sl), ($grav/($R_air*$TempLapse)));
+	$P_dry =$P_sl*pow((1-(TEMP_LAPSE* feet2meters($alt))/T_SEALEVEL), (GRAVITY/(R_AIR*TEMP_LAPSE)));
 	//THIS IS CORRECT (IDEAL GAS LAW)
 	$t_rank = fariengheight2kelvin($Tair);
-	$rho_dry = (($P_dry*1000)/($R_air*$t_rank));
+	$rho_dry = (($P_dry*1000)/(R_AIR*$t_rank));
 	
 	//Saturation pressure of wator vapor in air 
 	////THIS IS GOOD

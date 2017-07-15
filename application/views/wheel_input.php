@@ -8,7 +8,8 @@
     </div>
 
     <div class="row">
-            <?php echo GRAVITY; ?>
+            <?php echo GRAVITY;
+            echo T_SL;?>
             <?php 
             if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
             <?php echo  ($this->session->flashdata('message')); ?>

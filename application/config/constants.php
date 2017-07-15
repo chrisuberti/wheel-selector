@@ -98,6 +98,6 @@ define('GRAVITY', 9.8067); //m/s
 define('MMair', 28.965); //g-mol-1
 define('R_AIR', 287.06); //J-kg-1 K-1
 define('TEMP_LAPSE', 0.0065); //K/m
-define('T_SL', 288.15); //Sea level standard Temperatrure
-define('P_SL', 101.33); //Sea Level standard pressure kPa
+define('T_SEALEVEL', 288.15); //Sea level standard Temperatrure
+define('P_SEALEVEL', 101.33); //Sea Level standard pressure kPa
 
