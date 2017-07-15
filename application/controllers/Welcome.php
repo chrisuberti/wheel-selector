@@ -27,7 +27,7 @@ class Welcome extends CI_Controller {
   public function index(){
   	$this->load->view('dressings/header');
   	$this->load->view('dressings/navbar');
-  	$this->load->view('index_view');
+  	$this->load->view('baseline');
   	$this->load->view('dressings/footer');
   }
 	public function test(){

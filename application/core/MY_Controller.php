@@ -5,16 +5,10 @@ class MY_Controller extends CI_Controller {
         parent::__construct();
         		$this->load->library(array('form_validation'));
 		$this->load->helper(array('language'));
-		$this->load->model('stock');
-		$this->load->model('portfolio');
 		$this->load->library('table');
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
         if (!$this->ion_auth->logged_in()){	redirect('auth/login', 'refresh');	}
-        
-        $this->data['charts'] = FALSE;
-    
-    
         
     }
     

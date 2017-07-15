@@ -1,8 +1,5 @@
 
-<<<<<<< HEAD
-=======
 <?php $url = 'c9';?>
->>>>>>> laptop2
 <!DOCTYPE html>
 <html lang="en">
 
