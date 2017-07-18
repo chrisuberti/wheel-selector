@@ -11,7 +11,7 @@ class Wheels extends MY_Controller {
 	 
 	 function __construct(){
 	 	parent::__construct();
-	 	$this->load->model('post');
+	 	$this->load->model(array('post', 'wheelset'));
 	 	$this->load->library(array('ion_auth','form_validation'));
 		$this->load->helper(array('url','language', 'constants', 'form'));
 
@@ -23,7 +23,8 @@ class Wheels extends MY_Controller {
 	 	
 	 	$data['air_temp']=array(
 	 			'name'=>'air_temp',
-	 			'type'=>'number'
+	 			'type'=>'number',
+	 			'value'=>70
 	 			
 	 		);
 	 	$data['distance']=array(
@@ -36,14 +37,22 @@ class Wheels extends MY_Controller {
 	 			'type'=>'number'
 	 			
 	 		);
+	 		$data['altitude']=array(
+	 			'name'=>'altitude',
+	 			'type'=>'number',
+	 			'value'=>0
+	 			
+	 		);
 	 		$data['humidity']=array(
 	 			'name'=>'humidity',
-	 			'type'=>'number'
+	 			'type'=>'number',
+	 			'value'=>50
 	 			
 	 		);
 	 		$data['bike_weight']=array(
 	 			'name'=>'bike_weight',
-	 			'type'=>'number'
+	 			'type'=>'number',
+	 			'placeholder'=>'Minus Wheels'
 	 			
 	 		);
 	 		$data['wheelset']=array(
@@ -77,12 +86,51 @@ class Wheels extends MY_Controller {
 	    
 	     
 	 }
-	 public function density(){
-	 	
-	 }
+
 	 //Will reassign this to density calculator
 	 public function wheel_calc(){
 	 	
 	 }
+	 
+	 public function get_weather(){
+	 	/*
+	 	/  Key ID
+		/
+		/3b0387fbc9acfc15
+		/Project Name
+		/
+		/Bike Wheel Selector
+		/Company Website
+		/
+		/radical-design.us
+		/Contact Phone
+		/
+		/Contact Email
+		/
+		/chris@radical-design.us
+		/
+	 	*/
+	 	
+		$api_key = '3b0387fbc9acfc15';
+		
+		
+	 	$weather = file_get_contents('http://api.wunderground.com/api/3b0387fbc9acfc15/conditions/q/45214.json');
+		$weather = json_decode($weather);
+		//preprint($weather);
+	 	$data['wind_degrees'] = $weather->current_observation->wind_degrees;
+	 	$data['wind_speed'] = $weather->current_observation->wind_mph;
+	 	$data['pressure_in'] = $weather->current_observation->pressure_in;
+	 	$data['alt'] = $weather->current_observation->display_location->elevation;
+	 	$data['temp_f']= $weather->current_observation->temp_f;
+	 	$data['relative_humidity']= (int)trim($weather->current_observation->relative_humidity, "%");
+	 	
+	 	
+	 	
+	 	$data['density_data'] = $this->wheelset->density($data['alt'],$data['temp_f'],$data['relative_humidity']);
+	 	preprint($data);
+	 	return($data);
+	 	//http://api.wunderground.com/api/3b0387fbc9acfc15/conditions/q/CA/San_Francisco.json
+	 }
 
   }
+  

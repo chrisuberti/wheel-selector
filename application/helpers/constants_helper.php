@@ -7,7 +7,7 @@
 //R_AIR = 287.06; //J-kg-1 K-1
 //TEMP_LAPSE = 0.0065; //K/m
 //T_SEALEVEL = 288.15;
-//$P_sl = 101.33; //Sea Level standard pressure kPa//
+//P_SEALEVEL = 101.33; //Sea Level standard pressure kPa//
 //
 
 
@@ -34,7 +34,7 @@ function densityCalc($Tair, $humidity, $alt){
 
 	//This only takes into account altitude gain!!!!
 	//Pressure dry 
-	$P_dry =$P_sl*pow((1-(TEMP_LAPSE* feet2meters($alt))/T_SEALEVEL), (GRAVITY/(R_AIR*TEMP_LAPSE)));
+	$P_dry =P_SEALEVEL*pow((1-(TEMP_LAPSE* feet2meters($alt))/T_SEALEVEL), (GRAVITY/(R_AIR*TEMP_LAPSE)));
 	//THIS IS CORRECT (IDEAL GAS LAW)
 	$t_rank = fariengheight2kelvin($Tair);
 	$rho_dry = (($P_dry*1000)/(R_AIR*$t_rank));

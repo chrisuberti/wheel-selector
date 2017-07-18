@@ -8,19 +8,24 @@
     </div>
 
     <div class="row">
-            <?php echo GRAVITY;
-            echo T_SL;?>
+
             <?php 
             if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
             <?php echo  ($this->session->flashdata('message')); ?>
-            
+            <?php echo anchor('wheels/get_weather');?>
             <?php echo form_open_multipart('wheels/density');?>
+            
             <div class='col-md-4'>
                 <table>
                     <tr><td><h3>Weather Metrics: </h3></td></tr>
                     <tr>
                         <td><?php echo form_label('Air Temperature (F): ', 'air_temp');?></td>
                         <td><?php echo form_input($air_temp);?>
+
+                    </tr>
+                    <tr>
+                        <td><?php echo form_label('Ride Altitude (ft): ', 'altitutde');?></td>
+                        <td><?php echo form_input($altitude);?>
 
                     </tr>
                     
@@ -33,12 +38,12 @@
                     
                     <tr>
                         <td><?php echo form_label('Distance (miles): ', 'distance');?></td>
-                        <td><?php echo form_input($humidity);?></td>
+                        <td><?php echo form_input($distance);?></td>
                     </tr>
                     
                     <tr>
                         <td><?php echo form_label('Climbing (feet): ', 'climbing');?></td>
-                        <td><?php echo form_input($humidity);?></td>
+                        <td><?php echo form_input($climbing);?></td>
                     </tr>
                     <tr>
                         <td><?php echo form_label('Ride Type: ', 'ride_type');?></td>
