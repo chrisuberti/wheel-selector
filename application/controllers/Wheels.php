@@ -21,6 +21,7 @@ class Wheels extends MY_Controller {
 	 public function index(){
 	 	$data['title']='Wheel Calculation Input';
 	 	
+	 	//Setup form validations
 	 	if($this->form_validation->run()==FALSE){
 	 		//Failure	
 	 	}else{
@@ -121,6 +122,7 @@ class Wheels extends MY_Controller {
 		/chris@radical-design.us
 		/
 	 	*/
+	 	
 	 	if(isset($_POST['weather_submit'])){
 	 		//this indicates that the weather submit button was pressed
 	 		$zip_code=$_POST['zip_code'];
