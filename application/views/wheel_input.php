@@ -10,14 +10,30 @@
     <div class="row">
 
             <?php 
-            if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
-            <?php echo  ($this->session->flashdata('message')); ?>
-            <?php preprint($this->session->flashdata('weather_data'));?>
-            <?php echo anchor('wheels/get_weather');?>
-            <?php echo form_open_multipart('wheels/density');?>
+                if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}
+                echo  ($this->session->flashdata('message'));
+                preprint($this->session->flashdata('weather_data'));
+                echo anchor('wheels/get_weather');
+            ?>
+         
             
             <div class='col-md-4'>
                 <table>
+                     <tr>
+                        <td><h4>Or: </h4></td>
+                        
+                    </tr>
+                    <tr>
+                        <?php echo form_open('wheels/get_weather');?>
+                        <td><?php echo form_label('Enter Zip Code: ', 'zip_code');?></td>
+                        <td><?php echo form_input($zip_code);?></td>
+                       
+                    </tr>
+                    <tr>
+                        <td><p><?php echo form_submit(array('name'=>'weather_submit', 'value'=>'Get Weather'));?></p></td>
+                          <?php form_close();?>
+                    </tr>
+                    <?php echo form_open_multipart('wheels');?>
                     <tr><td><h3>Weather Metrics: </h3></td></tr>
                     <tr>
                         <td><?php echo form_label('Air Temperature (F): ', 'air_temp');?></td>
@@ -34,17 +50,7 @@
                         <td><?php echo form_label('Humidity (%): ', 'humidity');?></td>
                         <td><?php echo form_input($humidity);?></td>
                     </tr>
-                    <tr>
-                        <td><h4>Or: </h4></td>
-                        
-                    </tr>
-                    <tr>
-                        <td><?php echo form_label('Enter Zip Code: ', 'zip_code');?></td>
-                        <td><?php echo form_input($zip_code);?></td>
-                    </tr>
-                    <tr>
-                        <td><p><?php echo form_submit(array('name'=>'weather_submit', 'value'=>'Calculate', 'formaction'=>'wheels/get_weather'));?></p></td>
-                    </tr>
+
                    
                     <tr><td><h3>Ride Metrics: </h3></td></tr>
                     
@@ -98,7 +104,7 @@
 
     <div class="row">
                     
-                    <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels/get_weather'));?></td>
+                    <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels'));?></td>
                     
     </div>
 </div>

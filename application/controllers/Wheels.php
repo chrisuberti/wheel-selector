@@ -31,9 +31,21 @@ class Wheels extends MY_Controller {
 	 	$data['air_temp']=array(
 	 			'name'=>'air_temp',
 	 			'type'=>'number',
-	 			'value'=>70
+	 			'value'=> set_value('air_temp', 10)
 	 			
 	 		);
+	 	
+	 	 if(!empty($_POST['zip_code'])){
+	 	 
+	 	 	$weather_data = $this->wheel_calc();
+	 	 	print_r($weather_data);
+	 	 	$data['air_temp']['value']=$weather_data['']; 
+	 	 	
+	 	 }
+	 	 
+	 	//$value = isset('weather_submit') && isset($this->session->flashdata('weather_data')) 
+	 	
+	 	
 	 	$this->form_validation->set_rules('air_temp', 'Air Temperature', 'required');
 	 	$data['distance']=array(
 	 			'name'=>'distance',
@@ -88,8 +100,9 @@ class Wheels extends MY_Controller {
 	 		);
 	 		$data['zip_code']=array(
 	 			'name'=>'zip_code',
+	 			'value'=>set_value('zip_code'),
 	 			'type'=>'number');
-	 		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
+	 			
 	 	
 	     $this->load->view('dressings/header');
 	     $this->load->view('wheel_input', $data);
@@ -112,52 +125,55 @@ class Wheels extends MY_Controller {
 		/Project Name
 		/
 		/Bike Wheel Selector
-		/Company Website
-		/
-		/radical-design.us
-		/Contact Phone
-		/
-		/Contact Email
-		/
-		/chris@radical-design.us
-		/
-	 	*/
+		*/
 	 	
-	 	if(isset($_POST['weather_submit'])){
-	 		//this indicates that the weather submit button was pressed
-	 		$zip_code=$_POST['zip_code'];
-			$api_key = '3b0387fbc9acfc15';
-			$url = 'http://api.wunderground.com/api/'.$api_key;
-			$url .='/conditions/q/'.$zip_code.'.json';
-			
-		 	$weather = file_get_contents($url);
-		 	$weather = json_decode($weather);
-			preprint($weather);
-			
-			if(isset($weather->response->error->description)){
-					$this->session->set_flashdata('message', 'Zip Code not found');
-					return FALSE;
-			}
-			//preprint($weather);
-			$data['city_name'] = $weather->current_observation->display_location->full;
-		 	$data['wind_degrees'] = $weather->current_observation->wind_degrees;
-		 	$data['wind_speed'] = $weather->current_observation->wind_mph;
-		 	$data['pressure_in'] = $weather->current_observation->pressure_in;
-		 	$data['alt'] = $weather->current_observation->display_location->elevation;
-		 	$data['temp_f']= $weather->current_observation->temp_f;
-		 	$data['relative_humidity']= (int)trim($weather->current_observation->relative_humidity, "%");
-		 	
-		 	
-		 	
-		 	$data['density_data'] = $this->wheelset->density($data['alt'],$data['temp_f'],$data['relative_humidity']);
-			$this->session->set_flashdata('weather_data', $data);
-			redirect('wheels');
+	 	$api_key = '3b0387fbc9acfc15';
+		$url = 'http://api.wunderground.com/api/'.$api_key;
+				
+		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
+	 			
+	 	if ($this->form_validation->run()==FALSE){
+	 		$this->session->set_flashdata('message', validation_errors('<p class = "error">','</p>'));
+	 		redirect('wheels');
+	 		
+	 	}else{ 
+	 		if(isset($_POST['weather_submit'])){
+	 			$zip_code=$_POST['zip_code'];
+	 			//get zip code data from weather submit, not direct form
+	 		}
+				
+				$url .='/conditions/q/'.$zip_code.'.json';
+				
+			 	$weather = file_get_contents($url);
+			 	$weather = json_decode($weather);
+				preprint($weather);
+				
+				if(isset($weather->response->error->description)){
+						$this->session->set_flashdata('message', 'Zip Code not found');
+						return FALSE;
+				}
+				//preprint($weather);
+				$data['city_name'] = $weather->current_observation->display_location->full;
+			 	$data['wind_degrees'] = $weather->current_observation->wind_degrees;
+			 	$data['wind_speed'] = $weather->current_observation->wind_mph;
+			 	$data['pressure_in'] = $weather->current_observation->pressure_in;
+			 	$data['alt'] = $weather->current_observation->display_location->elevation;
+			 	$data['temp_f']= $weather->current_observation->temp_f;
+			 	$data['relative_humidity']= (int)trim($weather->current_observation->relative_humidity, "%");
+			 	
+			 	
+			 	
+			 	$data['density_data'] = $this->wheelset->density($data['alt'],$data['temp_f'],$data['relative_humidity']);
+				
+				if(isset($_POST['weather_submit'])){
+					$this->session->set_flashdata('weather_data', $data);
+					redirect('wheels');
+				}else{
+					return($data);
+				}
+	 		}
 	 	}
 	 	
-
-	 	return($data);
-	 	//http://api.wunderground.com/api/3b0387fbc9acfc15/conditions/q/CA/San_Francisco.json
-	 }
 
   }
   
