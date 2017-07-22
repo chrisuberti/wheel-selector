@@ -20,13 +20,7 @@ class Wheels extends MY_Controller {
 	 }
 	 public function index(){
 	 	$data['title']='Wheel Calculation Input';
-	 	
-	 	//Setup form validations
-	 	if($this->form_validation->run()==FALSE){
-	 		//Failure	
-	 	}else{
-	 		//Success
-	 	}
+	 
 	 	
 	 	$data['air_temp']=array(
 	 			'name'=>'air_temp',
@@ -35,13 +29,6 @@ class Wheels extends MY_Controller {
 	 			
 	 		);
 	 	
-	 	 if(!empty($_POST['zip_code'])){
-	 	 
-	 	 	$weather_data = $this->wheel_calc();
-	 	 	print_r($weather_data);
-	 	 	$data['air_temp']['value']=$weather_data['']; 
-	 	 	
-	 	 }
 	 	 
 	 	//$value = isset('weather_submit') && isset($this->session->flashdata('weather_data')) 
 	 	
@@ -103,6 +90,17 @@ class Wheels extends MY_Controller {
 	 			'value'=>set_value('zip_code'),
 	 			'type'=>'number');
 	 			
+	 		if($weather_data=$this->session->flashdata('weather_data')){
+		 	 
+		 	 	$data['air_temp']['value']=$weather_data['temp_f'];
+		 	 	$data['altitude']['value']=$weather_data['alt']; 
+		 	 	$data['humidity']['value']=$weather_data['relative_humidity']; 
+		 	 	$data['zip_code']['value']=$weather_data['zip_code']; 
+		 	 	
+		 	 	
+	 	 }
+	 	 
+	 			
 	 	
 	     $this->load->view('dressings/header');
 	     $this->load->view('wheel_input', $data);
@@ -153,6 +151,7 @@ class Wheels extends MY_Controller {
 						return FALSE;
 				}
 				//preprint($weather);
+				$data['zip_code']=$zip_code;
 				$data['city_name'] = $weather->current_observation->display_location->full;
 			 	$data['wind_degrees'] = $weather->current_observation->wind_degrees;
 			 	$data['wind_speed'] = $weather->current_observation->wind_mph;
