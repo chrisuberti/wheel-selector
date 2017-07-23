@@ -18,7 +18,14 @@ class Wheels extends MY_Controller {
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 		
 	 }
+
+	 	
+	 	
+	 
 	 public function index(){
+
+	 	
+	 	
 	 	$data['title']='Wheel Calculation Input';
 	 
 	 	
@@ -33,7 +40,6 @@ class Wheels extends MY_Controller {
 	 	//$value = isset('weather_submit') && isset($this->session->flashdata('weather_data')) 
 	 	
 	 	
-	 	$this->form_validation->set_rules('air_temp', 'Air Temperature', 'required');
 	 	$data['distance']=array(
 	 			'name'=>'distance',
 	 			'type'=>'number'
@@ -90,19 +96,36 @@ class Wheels extends MY_Controller {
 	 			'value'=>set_value('zip_code'),
 	 			'type'=>'number');
 	 			
-	 		if($weather_data=$this->session->flashdata('weather_data')){
-		 	 
-		 	 	$data['air_temp']['value']=$weather_data['temp_f'];
+	 			
+	 	if(isset($_POST['weather_submit'])){
+	 		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
+	 		if($this->form_validation->run() == FALSE){
+	 			//zip code form validation fails
+	 		}else{
+	 			//zip code form validation is successful
+	 			$weather_data = $this->wheelset->getweather($_POST['zip_code']);
+	 			$data['air_temp']['value']=$weather_data['temp_f'];
 		 	 	$data['altitude']['value']=$weather_data['alt']; 
 		 	 	$data['humidity']['value']=$weather_data['relative_humidity']; 
 		 	 	$data['zip_code']['value']=$weather_data['zip_code']; 
-		 	 	
-		 	 	
-	 	 }
-	 	 
-	 			
+	 		}
+	 		
+	 	}
+	 	if(isset($_POST['wheel_submit'])){
+	 		//the Overall wheel calculation button has been pressed
+	 		$this->form_validation->set_rules('air_temp', 'Air Temperature', 'required');
+	 		$this->form_validation->set_rules('distance', 'Distance', 'required');
+	 		$this->form_validation->set_rules('altitude', 'Altitude', 'required');
+	 		$this->form_validation->set_rules('bike_weight', 'Bike Weight', 'required');
+	 		$this->form_validation->set_rules('humidity', 'Humidity', 'required');
+	 		$this->form_validation->set_rules('rider_weight', 'Rider Weight', 'required');
+	 		$this->form_validation->set_rules('rider_height', 'Rider Height', 'required');
+	 		
+	 		
+	 		
 	 	
-	     $this->load->view('dressings/header');
+	 	}
+	 	$this->load->view('dressings/header');
 	     $this->load->view('wheel_input', $data);
 	     $this->load->view('dressings/footer');
 	     
@@ -115,63 +138,7 @@ class Wheels extends MY_Controller {
 	 	
 	 }
 	 
-	 public function get_weather(){
-	 	/*
-	 	/  Key ID
-		/
-		/3b0387fbc9acfc15
-		/Project Name
-		/
-		/Bike Wheel Selector
-		*/
-	 	
-	 	$api_key = '3b0387fbc9acfc15';
-		$url = 'http://api.wunderground.com/api/'.$api_key;
-				
-		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
-	 			
-	 	if ($this->form_validation->run()==FALSE){
-	 		$this->session->set_flashdata('message', validation_errors('<p class = "error">','</p>'));
-	 		redirect('wheels');
-	 		
-	 	}else{ 
-	 		if(isset($_POST['weather_submit'])){
-	 			$zip_code=$_POST['zip_code'];
-	 			//get zip code data from weather submit, not direct form
-	 		}
-				
-				$url .='/conditions/q/'.$zip_code.'.json';
-				
-			 	$weather = file_get_contents($url);
-			 	$weather = json_decode($weather);
-				preprint($weather);
-				
-				if(isset($weather->response->error->description)){
-						$this->session->set_flashdata('message', 'Zip Code not found');
-						return FALSE;
-				}
-				//preprint($weather);
-				$data['zip_code']=$zip_code;
-				$data['city_name'] = $weather->current_observation->display_location->full;
-			 	$data['wind_degrees'] = $weather->current_observation->wind_degrees;
-			 	$data['wind_speed'] = $weather->current_observation->wind_mph;
-			 	$data['pressure_in'] = $weather->current_observation->pressure_in;
-			 	$data['alt'] = $weather->current_observation->display_location->elevation;
-			 	$data['temp_f']= $weather->current_observation->temp_f;
-			 	$data['relative_humidity']= (int)trim($weather->current_observation->relative_humidity, "%");
-			 	
-			 	
-			 	
-			 	$data['density_data'] = $this->wheelset->density($data['alt'],$data['temp_f'],$data['relative_humidity']);
-				
-				if(isset($_POST['weather_submit'])){
-					$this->session->set_flashdata('weather_data', $data);
-					redirect('wheels');
-				}else{
-					return($data);
-				}
-	 		}
-	 	}
+	
 	 	
 
   }

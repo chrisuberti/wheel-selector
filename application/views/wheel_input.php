@@ -13,7 +13,7 @@
                 if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}
                 echo  ($this->session->flashdata('message'));
                // preprint($this->session->flashdata('weather_data'));
-                echo anchor('wheels/get_weather');
+                echo anchor('wheels');
             ?>
          
             
@@ -24,7 +24,7 @@
                         
                     </tr>
                     <tr>
-                        <?php echo form_open('wheels/get_weather');?>
+                        <?php echo form_open('wheels');?>
                         <td><?php echo form_label('Enter Zip Code: ', 'zip_code');?></td>
                         <td><?php echo form_input($zip_code);?></td>
                        
@@ -33,7 +33,7 @@
                         <td><p><?php echo form_submit(array('name'=>'weather_submit', 'value'=>'Get Weather'));?></p></td>
                           <?php form_close();?>
                     </tr>
-                    <?php echo form_open_multipart('wheels');?>
+                    <?php echo form_open_multipart('wheels/index');?>
                     <tr><td><h3>Weather Metrics: </h3></td></tr>
                     <tr>
                         <td><?php echo form_label('Air Temperature (F): ', 'air_temp');?></td>
@@ -104,7 +104,7 @@
 
     <div class="row">
                     
-                    <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels'));?></td>
+                    <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels/index'));?></td>
                     
     </div>
 </div>
