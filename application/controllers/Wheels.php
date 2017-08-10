@@ -36,36 +36,43 @@ class Wheels extends MY_Controller {
 	 	$data['air_temp']=array(
 	 			'name'=>'air_temp',
 	 			'type'=>'number',
+	 			'value'=>set_value('air_temp'),
 	 			'placeholder'=>'Current air temp'
 	 			
 	 		);
 	
 	 	$data['distance']=array(
 	 			'name'=>'distance',
-	 			'type'=>'number'
+	 			'type'=>'number',
+	 			'value'=>set_value('distance')
 	 			
 	 		);
 	 	$data['climbing']=array(
 	 			'name'=>'climbing',
-	 			'type'=>'number'
+	 			'type'=>'number',
+	 			'value'=>set_value('climbing')
 	 			
 	 		);
 	 		$data['altitude']=array(
 	 			'name'=>'altitude',
 	 			'type'=>'number',
-	 			'placeholder'=>'Altitude of segment'
+	 			'placeholder'=>'Altitude of segment',
+	 			'value'=>set_value('altitude')
 	 			
 	 		);
 	 		$data['humidity']=array(
 	 			'name'=>'humidity',
 	 			'type'=>'number',
-	 			'placeholder'=>'Enter Relative Humidity'
+	 			
+	 			'placeholder'=>'Enter Relative Humidity',
+	 			'value'=>set_value('humidity')
 	 			
 	 		);
 	 		$data['bike_weight']=array(
 	 			'name'=>'bike_weight',
 	 			'type'=>'number',
-	 			'placeholder'=>'Minus Wheels'
+	 			'placeholder'=>'Minus Wheels',
+	 			'value'=>set_value('bike_weight')
 	 			
 	 		);
 	 		$data['wheelset']=array(
@@ -75,10 +82,12 @@ class Wheels extends MY_Controller {
 	 			'44mm'=>'44mm Boyd',
 	 			'60mm'=>'60mm Boyd',
 	 			'90mm'=>'90mm Boyd',
+	 			'value'=>set_value('wheelset_options')
 	 			);
 	 		$data['ride_type_options']=array(
 	 			'solo'=>'Solo Ride',
-	 			'group'=>'Group Ride'
+	 			'group'=>'Group Ride',
+	 			'value'=>set_value('wheelset_options')
 	 			);
 	 		$data['ride_type']=array(
 	 			'name'=>'ride_type',
@@ -86,10 +95,12 @@ class Wheels extends MY_Controller {
 	 		$data['rider_weight']=array(
 	 			'name'=>'rider_weight',
 	 			'type'=>'number',
+	 			'value'=>set_value('rider_weight')
 	 		);
 	 		$data['rider_height']=array(
 	 			'name'=>'rider_height',
 	 			'type'=>'number',
+	 			'value'=>set_value('rider_height')
 	 		);
 	 		$data['zip_code']=array(
 	 			'name'=>'zip_code',
@@ -98,7 +109,7 @@ class Wheels extends MY_Controller {
 	 			
 	 			
 	 	if(isset($_POST['weather_submit']) || isset($_POST['wheel_submit'])){
-		 	if(isset($_POST['zip_code'])){
+		 	if(isset($_POST['zip_code']) && isset($_POST['weather_submit'])){
 		 		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
 		 		if($this->form_validation->run() == FALSE){
 		 			//zip code form validation fails
@@ -111,25 +122,36 @@ class Wheels extends MY_Controller {
 			 	 	$data['zip_code']['value']=$weather_data['zip_code']; 
 		 		}
 		 	}elseif(isset($_POST['wheel_submit'])){
+
 		 		//the Overall wheel calculation button has been pressed
 		 		$this->form_validation->set_rules('air_temp', 'Air Temperature', 'required|less_than[130]|greater_than[-20]');
 		 		$this->form_validation->set_rules('distance', 'Distance', 'required|greater_than[0]');
 		 		$this->form_validation->set_rules('altitude', 'Altitude', 'required|less_than[29000]|greater_than[0]');
 		 		$this->form_validation->set_rules('humidity', 'Humidity', 'required|less_than[100]|greater_than[0]');
-		 		
-		 		if($this->form_validation->run()){
-			 		$altitude = $this->input->post('alttitude');
-			 		$humidity = $this->input->post('humidity');
-			 		$Tair = $this->input->post('air_temp');
-			 		
-			 		$density = $this->wheelset->density($altitude, $Tair, $humidity);
-		 		}
-		 		$this->form_validation->set_rules('rider_weight', 'Rider Weight', 'required|greater_than[0]');
+ 	 			$this->form_validation->set_rules('rider_weight', 'Rider Weight', 'required|greater_than[0]');
 		 		$this->form_validation->set_rules('rider_height', 'Rider Height', 'required|greater_than[0]');
 		 		$this->form_validation->set_rules('bike_weight', 'Bike Weight', 'required|greater_than[0]');
 		 		
-		 		echo "hey this is a test";
-	 		break;
+		 		if($this->form_validation->run()==FALSE){
+		 			//weather data fails
+		 		}else{
+			 		$altitude = $this->input->post('alttitude');
+			 		$humidity = $this->input->post('humidity');
+			 		$Tair = $this->input->post('air_temp');
+	
+		 		
+			 		$ride_data['density']= $this->wheelset->density($altitude, $Tair, $humidity);
+			 		$ride_data['climbing'] = $this->input->post('climbing');
+			 		$ride_data['distance'] = $this->input->post('distance');
+			 		$ride_data['bike_weight'] = $this->input->post('bike_weight');
+			 		$ride_data['rider_weight'] = $this->input->post('rider_weight');
+			 		$ride_data['rider_height'] = $this->input->post('rider_height');
+			 		
+			 		$work_req = $this->wheelset->calculate_work($ride_data);
+		 			
+		 		}
+		 	
+
 		 		
 		 	}
 

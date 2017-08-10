@@ -53,6 +53,10 @@ class Wheelset extends MY_Model{
 		return($data);
 	 }
 	 
+	 public function calculate_work($data=NULL){
+	 	echo "HELLO THERE CHILDREN";
+	 }
+	 
 	 
 	 
 	 

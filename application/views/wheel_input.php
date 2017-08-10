@@ -102,7 +102,7 @@
     <div class="row">
         <div class="col-md-4"></div>
          <div class="col-md-4">
-             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels/index'));?></td>
+             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels'));?></td>
         </div>
              
                     
