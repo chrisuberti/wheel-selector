@@ -98,47 +98,48 @@ class Wheels extends MY_Controller {
 	 			
 	 			
 	 	if(isset($_POST['weather_submit']) || isset($_POST['wheel_submit'])){
-	 		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
-	 		if($this->form_validation->run() == FALSE){
-	 			//zip code form validation fails
-	 		}else{
-	 			//zip code form validation is successful
-	 			$weather_data = $this->wheelset->getweather($_POST['zip_code']);
-	 			$data['air_temp']['value']=$weather_data['temp_f'];
-		 	 	$data['altitude']['value']=$weather_data['alt']; 
-		 	 	$data['humidity']['value']=$weather_data['relative_humidity']; 
-		 	 	$data['zip_code']['value']=$weather_data['zip_code']; 
-	 		}
-	 		
-	 	}elseif(isset($_POST['wheel_submit'])){
-	 		//the Overall wheel calculation button has been pressed
-	 		$this->form_validation->set_rules('air_temp', 'Air Temperature', 'required|less_than[130]|greater_than[-20]');
-	 		$this->form_validation->set_rules('distance', 'Distance', 'required|greater_than[0]');
-	 		$this->form_validation->set_rules('altitude', 'Altitude', 'required|less_than[29000]|greater_than[0]');
-	 		$this->form_validation->set_rules('humidity', 'Humidity', 'required|less_than[100]|greater_than[0]');
-	 		
-	 		if($this->form_validation->run()){
-		 		$altitude = $this->input->post('alttitude');
-		 		$humidity = $this->input->post('humidity');
-		 		$Tair = $this->input->post('air_temp');
+		 	if(isset($_POST['zip_code'])){
+		 		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
+		 		if($this->form_validation->run() == FALSE){
+		 			//zip code form validation fails
+		 		}else{
+		 			//zip code form validation is successful
+		 			$weather_data = $this->wheelset->getweather($_POST['zip_code']);
+		 			$data['air_temp']['value']=$weather_data['temp_f'];
+			 	 	$data['altitude']['value']=$weather_data['alt']; 
+			 	 	$data['humidity']['value']=$weather_data['relative_humidity']; 
+			 	 	$data['zip_code']['value']=$weather_data['zip_code']; 
+		 		}
+		 	}elseif(isset($_POST['wheel_submit'])){
+		 		//the Overall wheel calculation button has been pressed
+		 		$this->form_validation->set_rules('air_temp', 'Air Temperature', 'required|less_than[130]|greater_than[-20]');
+		 		$this->form_validation->set_rules('distance', 'Distance', 'required|greater_than[0]');
+		 		$this->form_validation->set_rules('altitude', 'Altitude', 'required|less_than[29000]|greater_than[0]');
+		 		$this->form_validation->set_rules('humidity', 'Humidity', 'required|less_than[100]|greater_than[0]');
 		 		
-		 		$density = $this->wheelset->density($altitude, $Tair, $humidity);
-	 		}
-	 		$this->form_validation->set_rules('rider_weight', 'Rider Weight', 'required|greater_than[0]');
-	 		$this->form_validation->set_rules('rider_height', 'Rider Height', 'required|greater_than[0]');
-	 		$this->form_validation->set_rules('bike_weight', 'Bike Weight', 'required|greater_than[0]');
-	 		
-	 		echo "hey this is a test";
+		 		if($this->form_validation->run()){
+			 		$altitude = $this->input->post('alttitude');
+			 		$humidity = $this->input->post('humidity');
+			 		$Tair = $this->input->post('air_temp');
+			 		
+			 		$density = $this->wheelset->density($altitude, $Tair, $humidity);
+		 		}
+		 		$this->form_validation->set_rules('rider_weight', 'Rider Weight', 'required|greater_than[0]');
+		 		$this->form_validation->set_rules('rider_height', 'Rider Height', 'required|greater_than[0]');
+		 		$this->form_validation->set_rules('bike_weight', 'Bike Weight', 'required|greater_than[0]');
+		 		
+		 		echo "hey this is a test";
 	 		break;
-	 		
-	 	
-	 	}
-	 	$this->load->view('dressings/header');
-	     $this->load->view('wheel_input', $data);
-	     $this->load->view('dressings/footer');
+		 		
+		 	}
+
+	     
+		}
+		$this->load->view('dressings/header');
+	    $this->load->view('wheel_input', $data);
+	    $this->load->view('dressings/footer');
 	     
 	    
-	     
 	 }
 	 
 	 public function all_wheelsets(){

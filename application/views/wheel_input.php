@@ -19,10 +19,7 @@
             
             <div class='col-md-4'>
                 <table>
-                     <tr>
-                        <td><h4>Or: </h4></td>
-                        
-                    </tr>
+
                     <tr>
                         <?php echo form_open('wheels');?>
                         <td><?php echo form_label('Enter Zip Code: ', 'zip_code');?></td>
@@ -103,8 +100,11 @@
 
 
     <div class="row">
-                    
-                    <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels/index'));?></td>
+        <div class="col-md-4"></div>
+         <div class="col-md-4">
+             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels/index'));?></td>
+        </div>
+             
                     
     </div>
 </div>
