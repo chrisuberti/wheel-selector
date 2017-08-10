@@ -10,12 +10,18 @@ class Wheelset extends MY_Model{
     public $wheel_name;
     public $weight;
     public $tubular;
+    public $manufacturer;
     
     
     public function __construct(){
         parent::__construct();
        
     }
+    
+   
+    
+    
+    
     public function density($alt="", $Tair="", $humidity=""){
 	 	
 		//This only takes into account altitude gain!!!!

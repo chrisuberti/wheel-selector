@@ -17,6 +17,10 @@ class Wheels extends MY_Controller {
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 		
+		
+		$data['title']='Wheelsets - '.$this->config->item('site_title', 'ion_auth');
+		
+		$this->load->vars($data);
 	 }
 
 	 	
@@ -136,6 +140,67 @@ class Wheels extends MY_Controller {
 	    
 	     
 	 }
+	 
+	 public function all_wheelsets(){
+	 	    	if (!$this->ion_auth->logged_in()){
+			redirect('auth/login', 'refresh');
+		}else{
+			$this->table->set_template(array('table_open'=>"<table class='table table-striped table-bordered table-hover' id='post_summary_table'>"));
+			$this->table->set_heading('Wheelset',array('data'=>'&nbsp', 'style'=>'width:20%'), 'Manufacturer', 'Weight', '');
+				
+			$wheelsets = $this->wheelset->find_all();
+			if($wheelsets){
+				foreach($wheelsets as $wheeleset){
+					$wheel_drag = $this->wheelset_drag->find_by_id($wheelset->id);
+					$title = $wheelset->wheel_name . "<br>".anchor('wheels/edit_wheelset/'.$wheelset->id, 'Edit', array('class'=>'btn btn-success'));
+					$picture = "blank";
+					$wheel_mfg = $wheelset->manufacturer; 
+					$wheel_weight = $wheelset->weight;
+					
+					$del_button = form_open('wheels/del_wheelset/'.$wheelset->id);
+	    			$del_button .= form_submit('del_wheelset', 'Delete', array('class'=>'btn btn-danger',"onClick"=>"return deleteconfirm();"));
+	    			$del_button .= form_close();
+					
+					$this->table->add_row($wheel_name, $picture, $wheel_mfg, $wheel_weight);
+					
+				}
+				$data['wheelset_table']=$this->table->generate();
+			}else{
+				$data['wheelset_table']="<br> There are no Wheels yet add some wheels";
+			}
+			$this->load->view('wheel_admin/all', $data);
+		}
+			
+	}
+		
+	
+	 
+	 public function edit_wheelset($id=NULL){
+    	if (!$this->ion_auth->logged_in()){
+			redirect('auth/login', 'refresh');
+		}else{
+			
+			if($id == NULL){
+				$this->session->set_flashdata('message', 'No Photo Found');
+				
+				redirect('wheels/new_wheelset');
+			}elseif($wheelset = Wheelset::find_by_id($id)){
+				if(isset($_POST['submit'])){
+					$wheelset->name = $_POST['name'];
+					$wheelset->weight = $_POST['weight'];
+					$wheelset->tubular = $_POST['tubular'];
+					$wheelset->caption = $_POST['caption'];
+					$wheelset->visible = $_POST['visible'];
+					$wheelset->save();
+				}
+				
+        		
+
+				$data['del_button']=anchor("wheels/del_wheelset/".$photo->id, "Delete", array('class'=>'btn btn-danger','onClick'=>"return deleteconfirm();"));
+				$this->load->view('admin/edit_wheelset', $data);
+    		}
+		}
+    }
 
 	
 	 
