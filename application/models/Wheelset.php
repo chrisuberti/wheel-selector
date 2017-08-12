@@ -11,6 +11,7 @@ class Wheelset extends MY_Model{
     public $weight;
     public $tubular;
     public $manufacturer;
+    public $cost;
     
     
     public function __construct(){
@@ -53,9 +54,6 @@ class Wheelset extends MY_Model{
 		return($data);
 	 }
 	 
-	 public function calculate_work($data=NULL){
-	 	echo "HELLO THERE CHILDREN";
-	 }
 	 
 	 
 	 
@@ -111,5 +109,46 @@ class Wheelset extends MY_Model{
 				return($data);
 			
 	 		}
+	 		
+	 		
+	 		
+	 		
+	 public function calculate_work($data=NULL){
+	 	echo "HELLO THERE CHILDREN";
+	 }
+	 
+	 public function estimate_rider_cda($m_rider, $wheight){
+	 	//This only returns CdA for respective positions
+	 	//Need another function in order to claculate 'effective' cdA, or some sort of algo for differnet positions
+	 	
+	 	
+	 	// Rider Cd estimate
+		$BSA = 0.007184 * pow($m_rider, 0.425) * pow($height, 0.725);
+		// Body surface estimate form Du Bois method
+		$FA_drops = 0.18 * $BSA;
+		// Linear correlation of BSA to cyclist frontal area from paper on hour records
+		// this is for drops, need to correlate back out to which riding position you're in
+		
+		$cd_tops = 1.15;
+		$cd_hoods = 1;
+		$cd_drops = 0.88;
+		$cd_tt = 0.70;
+		
+		$FA_base = $FA_drops / 0.37;
+		$FA_hoods = $FA_base* 0.43;
+		$FA_tops = $FA_base * 0.65;
+		$FA_tt = $FA_base * 0.34;
+		
+		$data['cdA_drops'] = $FA_drops * $cd_drops;
+		$data['cdA_hoods'] = $FA_hoods * $cd_hoods;
+		$data['cdA_tops'] = $FA_tops * $cd_tops;
+		$data['cdA_tt'] = $FA_tt * $cd_tt;
+		
+		
+		return $data;
+		// Weighted average of time spent here
+		//$A = average(array($A_tops, $A_drops, $A_hoods));
+
+	 }
 }
 
