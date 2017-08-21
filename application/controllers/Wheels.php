@@ -144,10 +144,28 @@ class Wheels extends MY_Controller {
 			 		$ride_data['climbing'] = $this->input->post('climbing');
 			 		$ride_data['distance'] = $this->input->post('distance');
 			 		$ride_data['bike_weight'] = $this->input->post('bike_weight');
-			 		$ride_data['rider_weight'] = $this->input->post('rider_weight');
-			 		$ride_data['rider_height'] = $this->input->post('rider_height');
+			 		//input in lbs
+			 		$ride_data['rider_weight'] = lbs2kg($this->input->post('rider_weight'));
+			 		//input in inches
+			 		$ride_data['rider_height'] = in2meters($this->input->post('rider_height'))*100;
+			 		
+			 		$cda_data = $this->wheelset->estimate_rider_cda($ride_data['rider_weight'], $ride_data['rider_height']);
+			 		
+			 		$pos_time['drops']=.33;
+			 		$pos_time['hoods']=.33;
+			 		$pos_time['tops']=.34;
+			 		$pos_time['tt']=0.0;
+			 		
+			 		
+			 		
+			 		
+			 		$cda = $this->wheelset->weighted_cda_averages($cda_data, $pos_time);
+			 		
+			 		preprint($cda);	 
 			 		
 			 		$work_req = $this->wheelset->calculate_work($ride_data);
+			 		
+			 	
 		 			
 		 		}
 		 	

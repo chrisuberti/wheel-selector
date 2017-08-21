@@ -114,10 +114,25 @@ class Wheelset extends MY_Model{
 	 		
 	 		
 	 public function calculate_work($data=NULL){
-	 	echo "HELLO THERE CHILDREN";
+	 	echo "HELLO THERE CHILDREN, I just ran the work calc function";
 	 }
 	 
-	 public function estimate_rider_cda($m_rider, $wheight){
+	 
+	 public function weighted_cda_averages($cda_data, $weighing_array){
+	 	
+	 	$cda =  $cda_data['cda_drops']*$weighing_array['drops'];
+	 	$cda += $cda_data['cda_hoods']*$weighing_array['hoods'];
+	 	$cda += $cda_data['cda_tops']*$weighing_array['tops'];
+	 	$cda += $cda_data['cda_tt']*$weighing_array['tt'];
+	 	
+	 	return $cda;
+	 	
+	 }
+	 
+	 public function estimate_rider_cda($m_rider, $height){
+	 	//good reference to cda analysis: https://www.cyclingpowerlab.com/CyclingAerodynamics.aspx
+	 	
+	 	
 	 	//This only returns CdA for respective positions
 	 	//Need another function in order to claculate 'effective' cdA, or some sort of algo for differnet positions
 	 	
@@ -139,10 +154,10 @@ class Wheelset extends MY_Model{
 		$FA_tops = $FA_base * 0.65;
 		$FA_tt = $FA_base * 0.34;
 		
-		$data['cdA_drops'] = $FA_drops * $cd_drops;
-		$data['cdA_hoods'] = $FA_hoods * $cd_hoods;
-		$data['cdA_tops'] = $FA_tops * $cd_tops;
-		$data['cdA_tt'] = $FA_tt * $cd_tt;
+		$data['cda_drops'] = $FA_drops * $cd_drops;
+		$data['cda_hoods'] = $FA_hoods * $cd_hoods;
+		$data['cda_tops'] = $FA_tops * $cd_tops;
+		$data['cda_tt'] = $FA_tt * $cd_tt;
 		
 		
 		return $data;

@@ -15,9 +15,17 @@
 //convert meters to feet;
 function feet2meters($ft){return $ft*0.3048;}
 
+
+//contert inches to meters
+function in2meters($in){return $in/12*0.3048;}
+
 //
 function inHg2kPa($p){return $p*3.38639;}
  
+ 
+//Conbert lbs to kilograms
+
+function lbs2kg($lbs){return $lbs*0.453592;}
  
 //convert celcius to farienheight
 function celcius2farienheight($cel){return 1.8*$cel+32;}
