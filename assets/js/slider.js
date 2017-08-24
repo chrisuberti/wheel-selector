@@ -1,14 +1,4 @@
-
-$(document).ready(function(){
-//  $('#history_table').DataTable({
-//      "order": [[ 6, "desc"]]
-//  });  
-//    $('#outstanding_table').DataTable({
-//      "order": [[ 6, "desc"]],
-//      "pagination": false
-//  });
-  
-
+$( function() {
     $( "#slider-range" ).slider({
       range: true,
       min: 0,
@@ -25,21 +15,4 @@ $(document).ready(function(){
     $( "#amt_tops" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ));
     $( "#amt_hoods" ).val( "$" + $( "#slider-range" ).slider( "values", 1 ));
     $( "#amt_drops" ).val( "$" + $( "#slider-range" ).slider( "values", 1 ));
-   ;
-
-      
-})
-
-
-
-//var data = JSON.parse(document.getElementById('dom-target').innerHTML);
-//data = 
-//console.log(data);
-//new Morris.Line({
-//  element: 'myfirstchart',
-//  data: [ data ],
-//      xkey: 'time',
-//      ykeys: ['value'],
-//      labels: ['value']
-//});
-
+  } );

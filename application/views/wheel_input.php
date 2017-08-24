@@ -90,6 +90,19 @@
                     <tr>
                         <td><hr></td>
                     </tr>
+                    <tr>
+                        <p>
+                          <label for="tops_amt">Tops:</label>
+                          <input type="text" id="amt_tops" readonly style="border:0; color:#f6931f; font-weight:bold;"><br>
+                          <label for="hoods_amt">Hoods:</label>
+                          <input type="text" id="amt_hoods" readonly style="border:0; color:#f6931f; font-weight:bold;"><br>
+                          <label for="drops_amt">Drops:</label>
+                          <input type="text" id="amt_drops" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                          
+                        </p>
+                         
+                        <div id="slider-range"></div>
+                    </tr>
 
                 </table>
             </div>
@@ -111,4 +124,7 @@
 
 
 </body>
+
+
+<script src='<?php echo asset_url()."js/slider.js";?>'></script>
 	
