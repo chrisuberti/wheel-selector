@@ -12,7 +12,7 @@ $( function() {
         $( "#amt_drops" ).val( drops_time + "%");
       }
     });
-    $( "#amt_tops" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ));
-    $( "#amt_hoods" ).val( "$" + $( "#slider-range" ).slider( "values", 1 ));
-    $( "#amt_drops" ).val( "$" + $( "#slider-range" ).slider( "values", 1 ));
+    $( "#amt_tops" ).val( $( "#slider-range" ).slider( "values", 0 ) + "%");
+    $( "#amt_hoods" ).val( $( "#slider-range" ).slider( "values", 1 )+ "%");
+    $( "#amt_drops" ).val(  $( "#slider-range" ).slider( "values", 1 )+ "%");
   } );

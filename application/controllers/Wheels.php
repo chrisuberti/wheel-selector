@@ -108,6 +108,27 @@ class Wheels extends MY_Controller {
 	 			'type'=>'number');
 	 			
 	 			
+	 		$data['amt_tops']=array(
+	 			'name'=>'amt_tops',
+	 			'id'=>'amt_tops',
+	 			'value'=>set_value('amt_tops')
+	 		);
+	 		
+	 		$data['amt_hoods']=array(
+	 			'name'=>'amt_hoods',
+	 			'id'=>'amt_hoods',
+	 			'type'=>'text',
+	 			'value'=>set_value('amt_hoods')
+	 		);
+	 		
+	 		$data['amt_drops']=array(
+	 			'name'=>'amt_drops',
+	 			'id'=>'amt_drops',
+	 			'type'=>'text',
+	 			'value'=>set_value('amt_drops')
+	 		);
+	 			
+	 			
 	 	if(isset($_POST['weather_submit']) || isset($_POST['wheel_submit'])){
 		 	if(isset($_POST['zip_code']) && isset($_POST['weather_submit'])){
 		 		$this->form_validation->set_rules('zip_code', 'Zip Code', 'required|min_length[5]|max_length[5]');
@@ -151,10 +172,12 @@ class Wheels extends MY_Controller {
 			 		
 			 		$cda_data = $this->wheelset->estimate_rider_cda($ride_data['rider_weight'], $ride_data['rider_height']);
 			 		
-			 		$pos_time['drops']=.33;
-			 		$pos_time['hoods']=.33;
-			 		$pos_time['tops']=.34;
+			 		$pos_time['drops']=substr($this->input->post('amt_drops'), 0, -1);
+			 		$pos_time['hoods']=substr($this->input->post('amt_hoods'), 0, -1);
+			 		$pos_time['tops']=substr($this->input->post('amt_tops'), 0, -1);
 			 		$pos_time['tt']=0.0;
+			 		
+			 		preprint($pos_time);
 			 		
 			 		
 			 		

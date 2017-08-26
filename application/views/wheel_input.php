@@ -92,12 +92,13 @@
                     </tr>
                     <tr>
                         <p>
-                          <label for="tops_amt">Tops:</label>
-                          <input type="text" id="amt_tops" readonly style="border:0; color:#f6931f; font-weight:bold;"><br>
-                          <label for="hoods_amt">Hoods:</label>
-                          <input type="text" id="amt_hoods" readonly style="border:0; color:#f6931f; font-weight:bold;"><br>
-                          <label for="drops_amt">Drops:</label>
-                          <input type="text" id="amt_drops" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                          <?php echo form_label('Tops: ', 'amt_tops');?>
+                          <input type="text" id="amt_tops" name='amt_tops' style="border:0; color:#f6931f; font-weight:bold;"><br>
+                          <?php echo form_label('Hoods: ', 'amt_hoods');?>
+                          <input type="text" id="amt_hoods"  name = 'amt_hoods' style="border:0; color:#f6931f; font-weight:bold;"><br>
+                          <?php echo form_label('Drops: ', 'amt_drops');?>
+                          <input type="text" id="amt_drops" name='amt_drops' style="border:0; color:#f6931f; font-weight:bold;">
+                          
                           
                         </p>
                          
