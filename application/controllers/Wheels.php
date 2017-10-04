@@ -266,6 +266,69 @@ class Wheels extends MY_Controller {
 		}
     }
     
+    
+    	public function add_wheelset(){
+		if (!$this->ion_auth->logged_in()){
+			redirect('auth/login', 'refresh');
+			}else{
+				$data['title']='Add new wheelset - '.$this->config->item('site_title', 'ion_auth');
+				
+				if(!empty($_POST)){	
+					
+					// redirect them to the home page because they must be an administrator to view this
+					$this->form_validation->set_rules('wheel_name', 'Wheel Name', 'required|max_length[255]');
+					$this->form_validation->set_rules('weight', 'Weight', 'required|numeric');
+					$this->form_validation->set_rules('tubular', 'Tubular', 'required');
+					$this->form_validation->set_rules('deg0', 'CdA at 0 deg', 'required|numeric');
+					$this->form_validation->set_rules('deg5', 'CdA at 5 deg', 'required|numeric');
+					$this->form_validation->set_rules('deg10', 'CdA at 10 deg', 'required|numeric');
+					$this->form_validation->set_rules('deg15', 'CdA at 15 deg', 'required|numeric');
+					$this->form_validation->set_rules('deg20', 'CdA at 20 deg', 'required|numeric');
+					
+					if ($this->form_validation->run()==FALSE){
+						//not valid
+						//These temporary info are used to re-populate fields
+						$data['temp_wheel_name'] = $this->input->post('wheel_name');
+						$data['temp_weight']= $this->input->post('weight');
+						$data['temp_tubular']= $this->input->post('tubular');
+						$data['temp_deg0']= $this->input->post('deg0');
+						$data['temp_deg5']= $this->input->post('deg5');
+						$data['temp_deg10']= $this->input->post('deg10');
+						$data['temp_deg15']= $this->input->post('deg15');
+						$data['temp_deg20']= $this->input->post('deg20');
+						
+						
+							
+						$this->load->view('wheel_admin/add_wheels', $data);
+					}else{//form validation works
+						$wheel_info = new Wheelset;
+						$wheel_drag = new Wheelset_drag;
+						
+						$wheel_info->wheel_name = $this->input->post('wheel_name');
+						$wheel_info->weight = $this->input->post('weight');
+						$wheel_info->tubular = $this->input->post('tubular');
+						$wheel_info->save();
+						
+						$wheel_drag->wheelset_id = $wheel_info->id;
+						$wheel_drag->deg0 = $this->input->post('deg0');
+						$wheel_drag->deg5 = $this->input->post('deg5');
+						$wheel_drag->deg10 = $this->input->post('deg10');
+						$wheel_drag->deg15 = $this->input->post('deg15');
+						$wheel_drag->deg20 = $this->input->post('deg20');
+						$wheel_drag->save();
+						
+			
+						$this->session->set_flashdata('message', '1 New Wheelset Added!');
+						redirect('wheels/all_wheelsets');
+					}
+				}
+				$this->load->view('wheel_admin/add_wheels', $data);
+		}
+	}
+	
+	
+	
+    
      public function test(){
     	$this->load->view('dressings/header');
      	//echo ' 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>				<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>"';
