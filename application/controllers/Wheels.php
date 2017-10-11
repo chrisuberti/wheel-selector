@@ -252,11 +252,21 @@ class Wheels extends MY_Controller {
 			redirect('auth/login', 'refresh');
 		}else{
 			
+			$this->form_validation->set_rules('wheel_name', 'Wheel Name', 'required|max_length[255]');
+			$this->form_validation->set_rules('weight', 'Weight', 'required|numeric');
+			$this->form_validation->set_rules('tubular', 'Tubular', '');
+			$this->form_validation->set_rules('deg0', 'CdA at 0 deg', 'required|numeric');
+			$this->form_validation->set_rules('deg5', 'CdA at 5 deg', 'required|numeric');
+			$this->form_validation->set_rules('deg10', 'CdA at 10 deg', 'required|numeric');
+			$this->form_validation->set_rules('deg15', 'CdA at 15 deg', 'required|numeric');
+			$this->form_validation->set_rules('deg20', 'CdA at 20 deg', 'required|numeric');
+		
 			if($id == NULL){
 				$this->session->set_flashdata('message', 'No Photo Found');
 				
 				redirect('wheels/all_wheelsets');
 			}elseif($wheelset_info = Wheelset::find_by_id($id)){
+				//prepopulate information from edit 
 				$data['name'] = $wheelset_info->wheel_name;
 				$data['weight']=$wheelset_info->weight;
 				$data ['tubular']=$wheelset_info->tubular;
@@ -268,7 +278,9 @@ class Wheels extends MY_Controller {
 				$data['deg10'] = $drag_data->deg10;
 				$data['deg15'] = $drag_data->deg15;
 				$data['deg20'] = $drag_data->deg20;
-				if(isset($_POST)){
+				
+				
+				if(!empty($_POST)){
 					
 					preprint($_POST);
 					$wheelset_info->wheel_name = $this->input->post('wheel_name');
@@ -291,6 +303,10 @@ class Wheels extends MY_Controller {
 
 				$data['del_button']=anchor("wheels/del_wheelset/".$wheelset_info->id, "Delete", array('class'=>'btn btn-danger','onClick'=>"return deleteconfirm();"));
 				$this->load->view('wheel_admin/edit_wheelset', $data);
+    		}
+    		else{
+    			$this->session->set_flashdata('message', 'No Wheelset Found');
+    			redirect('wheels/all_wheelsets');
     		}
 		}
     }
@@ -346,7 +362,6 @@ class Wheels extends MY_Controller {
 						$wheel_drag->deg20 = $this->input->post('deg20');
 						$wheel_drag->save();
 						
-			
 						$this->session->set_flashdata('message', '1 New Wheelset Added!');
 						redirect('wheels/all_wheelsets');
 					}
@@ -356,6 +371,23 @@ class Wheels extends MY_Controller {
 	}
 	
 	
+	public function del_wheelset($id=NULL){
+    	if($id==NULL){
+    		redirect('wheels/all_wheels');
+		}else{
+			$wheel = Wheelset::find_by_id($id);
+			$drag_data =Wheelset_drag::find_by('wheelset_id', $id);
+			
+			if($wheel){
+				$wheel->delete();
+				redirect('wheels/all_wheelsets');
+			}else{
+				$this->session->set_flashdata('Sorry, could not find comment');
+				redirect('wheels/all_wheelsets');
+				
+			}
+    	}
+    }
 	
     
      public function test(){
