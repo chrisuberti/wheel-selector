@@ -210,22 +210,30 @@ class Wheels extends MY_Controller {
 			redirect('auth/login', 'refresh');
 		}else{
 			$this->table->set_template(array('table_open'=>"<table class='table table-striped table-bordered table-hover' id='post_summary_table'>"));
-			$this->table->set_heading('Wheelset',array('data'=>'&nbsp', 'style'=>'width:20%'), 'Manufacturer', 'Weight', '');
+			$this->table->set_heading('Wheelset',array('data'=>'&nbsp', 'style'=>'width:20%'), 'Weight', '');
 				
 			$wheelsets = $this->wheelset->find_all();
+			//preprint($wheelsets);
 			if($wheelsets){
-				foreach($wheelsets as $wheeleset){
-					$wheel_drag = $this->wheelset_drag->find_by_id($wheelset->id);
-					$title = $wheelset->wheel_name . "<br>".anchor('wheels/edit_wheelset/'.$wheelset->id, 'Edit', array('class'=>'btn btn-success'));
-					$picture = "blank";
-					$wheel_mfg = $wheelset->manufacturer; 
-					$wheel_weight = $wheelset->weight;
+				foreach($wheelsets as $wheel_info){
 					
-					$del_button = form_open('wheels/del_wheelset/'.$wheelset->id);
+					$wheel_name = $wheel_info->wheel_name;
+					$wheel_drag = Wheelset_drag::find_by('wheelset_id', $wheel_info->id);
+					$title = $wheel_info->wheel_name . "<br>".anchor('wheels/edit_wheelset/'.$wheel_info->id, 'Edit', array('class'=>'btn btn-success'));
+					$picture = "blank";
+					//$wheel_mfg = $wheel_info->manufacturer; 
+					$wheel_weight = $wheel_info->weight;
+					
+					$del_button = form_open('wheels/del_wheelset/'.$wheel_info->id);
 	    			$del_button .= form_submit('del_wheelset', 'Delete', array('class'=>'btn btn-danger',"onClick"=>"return deleteconfirm();"));
 	    			$del_button .= form_close();
+	    			
+	    								
+					$edit_button = form_open('wheels/edit_wheelset/'.$wheel_info->id);
+	    			$edit_button .= form_submit('edit_wheelset', 'Edit', array('class'=>'btn btn-success'));
+	    			$edit_button .= form_close();
 					
-					$this->table->add_row($wheel_name, $picture, $wheel_mfg, $wheel_weight);
+					$this->table->add_row($wheel_name, $picture, $wheel_weight, $del_button, $edit_button);
 					
 				}
 				$data['wheelset_table']=$this->table->generate();
@@ -247,21 +255,42 @@ class Wheels extends MY_Controller {
 			if($id == NULL){
 				$this->session->set_flashdata('message', 'No Photo Found');
 				
-				redirect('wheels/new_wheelset');
-			}elseif($wheelset = Wheelset::find_by_id($id)){
-				if(isset($_POST['submit'])){
-					$wheelset->name = $_POST['name'];
-					$wheelset->weight = $_POST['weight'];
-					$wheelset->tubular = $_POST['tubular'];
-					$wheelset->caption = $_POST['caption'];
-					$wheelset->visible = $_POST['visible'];
-					$wheelset->save();
+				redirect('wheels/all_wheelsets');
+			}elseif($wheelset_info = Wheelset::find_by_id($id)){
+				$data['name'] = $wheelset_info->wheel_name;
+				$data['weight']=$wheelset_info->weight;
+				$data ['tubular']=$wheelset_info->tubular;
+				$data['wheelset_id']=$wheelset_info->id;
+				$drag_data = Wheelset_drag::find_by('wheelset_id', $wheelset_info->id)[0];
+				
+				$data['deg0'] = $drag_data->deg0;
+				$data['deg5'] = $drag_data->deg5;
+				$data['deg10'] = $drag_data->deg10;
+				$data['deg15'] = $drag_data->deg15;
+				$data['deg20'] = $drag_data->deg20;
+				if(isset($_POST)){
+					
+					preprint($_POST);
+					$wheelset_info->wheel_name = $this->input->post('wheel_name');
+					$wheelset_info->weight = $this->input->post('weight');
+					$wheelset_info->tubular = $this->input->post('tubular')==NULL ? 0 : 1;
+					$wheelset_info->save();
+					
+					$drag_data->deg0 = $this->input->post('deg0');
+					$drag_data->deg5 = $this->input->post('deg5');
+					$drag_data->deg10 = $this->input->post('deg10');
+					$drag_data->deg15 = $this->input->post('deg15');
+					$drag_data->deg20 = $this->input->post('deg20');
+					$drag_data->save();
+					
+					$this->session->set_flashdata('message', 'Wheelset Successfully Updated');
+					redirect('wheels/edit_wheelset/'.$wheelset_info->id);
 				}
 				
         		
 
-				$data['del_button']=anchor("wheels/del_wheelset/".$photo->id, "Delete", array('class'=>'btn btn-danger','onClick'=>"return deleteconfirm();"));
-				$this->load->view('admin/edit_wheelset', $data);
+				$data['del_button']=anchor("wheels/del_wheelset/".$wheelset_info->id, "Delete", array('class'=>'btn btn-danger','onClick'=>"return deleteconfirm();"));
+				$this->load->view('wheel_admin/edit_wheelset', $data);
     		}
 		}
     }
@@ -278,7 +307,7 @@ class Wheels extends MY_Controller {
 					// redirect them to the home page because they must be an administrator to view this
 					$this->form_validation->set_rules('wheel_name', 'Wheel Name', 'required|max_length[255]');
 					$this->form_validation->set_rules('weight', 'Weight', 'required|numeric');
-					$this->form_validation->set_rules('tubular', 'Tubular', 'required');
+					$this->form_validation->set_rules('tubular', 'Tubular', '');
 					$this->form_validation->set_rules('deg0', 'CdA at 0 deg', 'required|numeric');
 					$this->form_validation->set_rules('deg5', 'CdA at 5 deg', 'required|numeric');
 					$this->form_validation->set_rules('deg10', 'CdA at 10 deg', 'required|numeric');
@@ -288,14 +317,14 @@ class Wheels extends MY_Controller {
 					if ($this->form_validation->run()==FALSE){
 						//not valid
 						//These temporary info are used to re-populate fields
-						$data['temp_wheel_name'] = $this->input->post('wheel_name');
-						$data['temp_weight']= $this->input->post('weight');
-						$data['temp_tubular']= $this->input->post('tubular');
-						$data['temp_deg0']= $this->input->post('deg0');
-						$data['temp_deg5']= $this->input->post('deg5');
-						$data['temp_deg10']= $this->input->post('deg10');
-						$data['temp_deg15']= $this->input->post('deg15');
-						$data['temp_deg20']= $this->input->post('deg20');
+						$data['wheel_name'] = $this->input->post('wheel_name');
+						$data['weight']= $this->input->post('weight');
+						$data['tubular']= $this->input->post('tubular');
+						$data['deg0']= $this->input->post('deg0');
+						$data['deg5']= $this->input->post('deg5');
+						$data['deg10']= $this->input->post('deg10');
+						$data['deg15']= $this->input->post('deg15');
+						$data['deg20']= $this->input->post('deg20');
 						
 						
 							
@@ -306,7 +335,7 @@ class Wheels extends MY_Controller {
 						
 						$wheel_info->wheel_name = $this->input->post('wheel_name');
 						$wheel_info->weight = $this->input->post('weight');
-						$wheel_info->tubular = $this->input->post('tubular');
+						$wheel_info->tubular = $this->input->post('tubular')==NULL ? 0 : 1;
 						$wheel_info->save();
 						
 						$wheel_drag->wheelset_id = $wheel_info->id;

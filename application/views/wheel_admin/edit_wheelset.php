@@ -17,16 +17,17 @@
             <?php 
             if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
             <?php echo output_message($this->session->flashdata('message')); ?>
+            <?php echo "<br>". anchor('wheels/all_wheelsets');?>
          
          
          
-            <?php echo form_open('wheels/add_wheelset');?>
+            <?php echo form_open('wheels/edit_wheelset/'.$wheelset_id);?>
             <p><strong>Wheelset Name</strong>:<br />
-			<input type="text" name="wheel_name" size="80" value = "<?php echo set_value('wheel_name')?>" /></p>
+			<input type="text" name="wheel_name" size="80" value = "<?php echo $name?>" /></p>
 			Wheelset Weight (grams): 
-			<input type="number" name="weight" value = "<?php echo set_value('weight')?>" /></p>
+			<input type="number" name="weight" value = "<?php echo $weight?>" /></p>
 			Tubular (select if true):
-			<?php echo form_radio(array('name'=>'tubular'));?>
+			<?php echo form_radio(array('name'=>'tubular', 'checked' => $tubular));?>
 			<hr>
 			<br>
 			<table>
@@ -41,7 +42,7 @@
 			<?php 
 			    for($i = 0; $i < 25; $i = $i+5){
 			        $drag='deg'.$i;
-			        echo "<td>". form_input(array('name'=>'deg'.$i, 'type' => 'number')) . "</td>";
+			        echo "<td>". form_input(array('name'=>'deg'.$i, 'type' => 'number', 'value'=>$$drag)) . "</td>";
 			    }
 			?>
 				</tr>
@@ -50,8 +51,9 @@
             <br clear="all" />
             
             
-            <p><input type="submit" value="Submit" /></p>
+            <p><input type="submit" value="Update" /></p>
             <?php echo form_close(); ?>
+            <?php echo $del_button;?>
             
             <hr />
         </div><!-- Close content -->

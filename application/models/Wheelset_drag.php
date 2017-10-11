@@ -2,7 +2,7 @@
 
 
 class Wheelset_drag extends MY_Model{
-    const DB_TABLE = 'wheelsets_drag';
+    const DB_TABLE = 'wheelset_drag';
     const DB_TABLE_PK = 'id';
     
     //Need to list out all the db fields here

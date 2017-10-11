@@ -14,7 +14,7 @@
 
     <div id="content-outer" class ="clear"><div id="content-wrapper">
         <div id="content"><div class="col-one">
-            <?php echo anchor('wheels/create', '+ Add Wheelset');?>
+            <?php echo anchor('wheels/add_wheelset', '+ Add Wheelset');?>
             <?php 
             if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
             <?php echo output_message($this->session->flashdata('message')); ?>

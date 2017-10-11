@@ -10,8 +10,8 @@ class Wheelset extends MY_Model{
     public $wheel_name;
     public $weight;
     public $tubular;
-    public $manufacturer;
-    public $cost;
+   // public $manufacturer;
+   // public $cost;
     
     
     public function __construct(){
