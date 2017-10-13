@@ -81,13 +81,16 @@ class Wheels extends MY_Controller {
 	 		
 	 		
 	 		$wheelsets = $this->wheelset->find_all();
-	 		preprint($wheelsets);
-			//preprint($wheelsets);
+	 		$data['wheelset_options'] = array();
 			if($wheelsets){
 				foreach($wheelsets as $wheel_info){
-					preprint($wheel_info);
+					$data['wheelset_options'][$wheel_info->id]=$wheel_info->wheel_name;
 				}
 			}
+			//$data['wheelset_options']['value'] = set_value('wheelset_options');
+			
+			preprint($data['wheelset_options']);
+			
 			
 	 		//$data['wheelset_options']=array(
 	 		//	'44mm'=>'44mm Boyd',
