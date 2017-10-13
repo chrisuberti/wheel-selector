@@ -17,7 +17,7 @@
             <?php 
             if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}?>
             <?php echo output_message($this->session->flashdata('message')); ?>
-            <?php echo "<br>". anchor('wheels/all_wheelsets');?>
+            <?php echo "<br>". anchor('wheels/all_wheelsets', "All Wheelsets");?>
          
          
          

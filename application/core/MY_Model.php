@@ -34,7 +34,7 @@ class MY_Model extends CI_Model{
 	
 	static function find_by($column = "", $column_val = ""){
 	  $query = self::$db->where($column, $column_val)->get(static::DB_TABLE)->custom_result_object(get_called_class());
-	  return $query;
+	  return $query[0];
 	}
 	  
   public function insert(){

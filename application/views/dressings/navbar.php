@@ -31,7 +31,10 @@
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
+<?php 
+$wheelsets = Wheelset::find_all();
 
+?>
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
@@ -40,11 +43,11 @@
                             <ul class="nav nav-second-level">
                                 <?php //$portfolios= $this->portfolio->find_all();?>
                                 <li>
-                                    <?php echo anchor('portfolios', 'View All');?>
+                                    <?php echo anchor('wheels/all_wheels', 'View All');?>
                                 </li>
-                                <?php foreach($portfolios as $portfolio):?>
+                                <?php foreach($wheelsets as $wheelset_info):?>
                                 <li>
-                                    <?php echo anchor('portfolios/view'.$portfolio->id, $portfolio->portfolio_name);?>
+                                    <?php echo anchor('wheels/edit_wheelset/'.$wheelset_info->id, $wheelset_info->wheelset_name);?>
                                 </li>
                                 <?php endforeach;?>
                             </ul>

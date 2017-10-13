@@ -13,7 +13,7 @@
                 if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}
                 echo  ($this->session->flashdata('message'));
                // preprint($this->session->flashdata('weather_data'));
-                echo anchor('wheels');
+                echo anchor('wheels', "Go to All Wheels");
             ?>
          
             

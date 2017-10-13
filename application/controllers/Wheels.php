@@ -11,7 +11,7 @@ class Wheels extends MY_Controller {
 	 
 	 function __construct(){
 	 	parent::__construct();
-	 	$this->load->model(array('post', 'wheelset'));
+	 	$this->load->model(array('wheelset'));
 	 	$this->load->library(array('ion_auth','form_validation'));
 		$this->load->helper(array('url','language', 'constants', 'form'));
 
@@ -78,12 +78,23 @@ class Wheels extends MY_Controller {
 	 		$data['wheelset']=array(
 	 			'name'=>'wheelset'
 	 		);
-	 		$data['wheelset_options']=array(
-	 			'44mm'=>'44mm Boyd',
-	 			'60mm'=>'60mm Boyd',
-	 			'90mm'=>'90mm Boyd',
-	 			'value'=>set_value('wheelset_options')
-	 			);
+	 		
+	 		
+	 		$wheelsets = $this->wheelset->find_all();
+	 		preprint($wheelsets);
+			//preprint($wheelsets);
+			if($wheelsets){
+				foreach($wheelsets as $wheel_info){
+					preprint($wheel_info);
+				}
+			}
+			
+	 		//$data['wheelset_options']=array(
+	 		//	'44mm'=>'44mm Boyd',
+	 		//	'60mm'=>'60mm Boyd',
+	 		//	'90mm'=>'90mm Boyd',
+	 		//	'value'=>set_value('wheelset_options')
+	 		//	);
 	 		$data['ride_type_options']=array(
 	 			'solo'=>'Solo Ride',
 	 			'group'=>'Group Ride',
@@ -127,6 +138,10 @@ class Wheels extends MY_Controller {
 	 			'type'=>'text',
 	 			'value'=>set_value('amt_drops')
 	 		);
+	 		
+	 		$data['all_wheelsets'] = Wheelset::find_all();
+	 	
+	 		
 	 			
 	 			
 	 	if(isset($_POST['weather_submit']) || isset($_POST['wheel_submit'])){
@@ -253,7 +268,7 @@ class Wheels extends MY_Controller {
 		}else{
 			
 			$this->form_validation->set_rules('wheel_name', 'Wheel Name', 'required|max_length[255]');
-			$this->form_validation->set_rules('weight', 'Weight', 'required|numeric');
+			$this->form_validation->set_rules('weight', 'Weight', 'required|numeric|greater_than[0]');
 			$this->form_validation->set_rules('tubular', 'Tubular', '');
 			$this->form_validation->set_rules('deg0', 'CdA at 0 deg', 'required|numeric');
 			$this->form_validation->set_rules('deg5', 'CdA at 5 deg', 'required|numeric');
@@ -271,7 +286,7 @@ class Wheels extends MY_Controller {
 				$data['weight']=$wheelset_info->weight;
 				$data ['tubular']=$wheelset_info->tubular;
 				$data['wheelset_id']=$wheelset_info->id;
-				$drag_data = Wheelset_drag::find_by('wheelset_id', $wheelset_info->id)[0];
+				$drag_data = Wheelset_drag::find_by('wheelset_id', $wheelset_info->id);
 				
 				$data['deg0'] = $drag_data->deg0;
 				$data['deg5'] = $drag_data->deg5;
@@ -322,7 +337,7 @@ class Wheels extends MY_Controller {
 					
 					// redirect them to the home page because they must be an administrator to view this
 					$this->form_validation->set_rules('wheel_name', 'Wheel Name', 'required|max_length[255]');
-					$this->form_validation->set_rules('weight', 'Weight', 'required|numeric');
+					$this->form_validation->set_rules('weight', 'Weight', 'required|numeric|greater_than[0]');
 					$this->form_validation->set_rules('tubular', 'Tubular', '');
 					$this->form_validation->set_rules('deg0', 'CdA at 0 deg', 'required|numeric');
 					$this->form_validation->set_rules('deg5', 'CdA at 5 deg', 'required|numeric');
@@ -376,9 +391,10 @@ class Wheels extends MY_Controller {
     		redirect('wheels/all_wheels');
 		}else{
 			$wheel = Wheelset::find_by_id($id);
-			$drag_data =Wheelset_drag::find_by('wheelset_id', $id);
+			$drag_data = Wheelset_drag::find_by('wheelset_id', $id);
 			
-			if($wheel){
+			if($wheel && $drag_data){
+				$drag_data->delete();
 				$wheel->delete();
 				redirect('wheels/all_wheelsets');
 			}else{
