@@ -128,7 +128,7 @@ class Wheelset extends MY_Model{
 	 		$adjusted_CdA =$this->wheel_adjust_cda($wheel, $data['timeWeighted_CdA'], $baselinewheel);
 	 		
 	 		
-	 		$total_weight = $data['bike_weight']+$data['rider_weight']+$wheel->weight;
+	 		$total_weight = $data['bike_weight']+$data['rider_weight']+$wheel->weight/1000;
 	 		
 	 		$w_climb = $total_weight * GRAVITY * $data['climbing'];
 	 	
@@ -137,10 +137,11 @@ class Wheelset extends MY_Model{
 	 		$pow_avg = $w_tot/(($data['distance']/1000/($data['v_avg']/0.2777778))*3600);
 	 		
 	 		//populate wheel-indexed array of all the data to output
+	 		//also change the work values to kJ instead of just jules
 	 		$results[$id] = array(
 	 			'pow_avg' => $pow_avg,
-	 			'w_tot' => $w_tot,
-	 			'w_climb' => $w_climb,
+	 			'w_tot' => $w_tot/1000,
+	 			'w_climb' => $w_climb/1000,
 	 			'tot_weight' => $total_weight,
 	 			'CdA' => $adjusted_CdA);
 	 		
@@ -189,6 +190,8 @@ class Wheelset extends MY_Model{
 	 }
 	 
 	 public function estimate_rider_cda($m_rider, $height){
+	 	//takes mass
+	 	
 	 	//good reference to cda analysis: https://www.cyclingpowerlab.com/CyclingAerodynamics.aspx
 	 	
 	 	
@@ -198,6 +201,9 @@ class Wheelset extends MY_Model{
 	 	
 	 	// Rider Cd estimate
 		$BSA = 0.007184 * pow($m_rider, 0.425) * pow($height, 0.725);
+		//http://olivernash.org/2014/05/25/mining-the-strava-data/cycling_drag_force.pdf
+		//
+		
 		// Body surface estimate form Du Bois method
 		$FA_drops = 0.18 * $BSA;
 		// Linear correlation of BSA to cyclist frontal area from paper on hour records

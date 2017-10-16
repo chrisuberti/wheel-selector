@@ -15,9 +15,12 @@
 //convert meters to feet;
 function feet2meters($ft){return $ft*0.3048;}
 
+//convert miles to meters
+function mi2m($mi){return $mi*1609.34;}
+
 
 //contert inches to meters
-function in2meters($in){return $in/12*0.3048;}
+function in2meters($in){return $in*0.0254;}
 
 //
 function inHg2kPa($p){return $p*3.38639;}

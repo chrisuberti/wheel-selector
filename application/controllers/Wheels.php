@@ -181,22 +181,28 @@ class Wheels extends MY_Controller {
 		 		
 			 		$ride_data['density']= $this->wheelset->density($altitude, $Tair, $humidity);
 			 		$ride_data['climbing'] = feet2meters($this->input->post('climbing'));
-			 		$ride_data['distance'] = $this->input->post('distance');
+			 		$ride_data['distance'] = mi2m($this->input->post('distance'));
 			 		$ride_data['bike_weight'] = $this->input->post('bike_weight');
 			 		//input in lbs
 			 		$ride_data['rider_weight'] = lbs2kg($this->input->post('rider_weight'));
 			 		//input in inches
-			 		$ride_data['rider_height'] = in2meters($this->input->post('rider_height'))*100;
+			 		$ride_data['rider_height'] = in2meters($this->input->post('rider_height'));
 			 		$ride_data['v_avg'] = mph2ms($this->input->post('v_avg'));
 			 		
-			 		$cda_data = $this->wheelset->estimate_rider_cda($ride_data['rider_weight'], $ride_data['rider_height']);
+			 		$cda_data = $this->wheelset->estimate_rider_cda($ride_data['rider_weight'], $ride_data['rider_height']*100);
+			 		preprint($cda_data);
 			 		
-			 		$pos_time['drops']=substr($this->input->post('amt_drops'), 0, -1);
-			 		$pos_time['hoods']=substr($this->input->post('amt_hoods'), 0, -1);
-			 		$pos_time['tops']=substr($this->input->post('amt_tops'), 0, -1);
+			 		//calculate ride time in seconds
+			 		$ride_data['time'] = $ride_data['distance']/$ride_data['v_avg'];
+			 		
+			 		$pos_time['drops']=substr($this->input->post('amt_drops'), 0, -1)/100;
+			 		$pos_time['hoods']=substr($this->input->post('amt_hoods'), 0, -1)/100;
+			 		$pos_time['tops']=substr($this->input->post('amt_tops'), 0, -1)/100;
 			 		$pos_time['tt']=0.0;
-			 		
+			 		preprint($pos_time);
 			 		//Calculate a time weighted CdA value for the entire ride
+			 		
+			 		
 			 		$ride_data['timeWeighted_CdA']=$this->wheelset->weighted_cda_averages($cda_data, $pos_time);
 			 		//This should be improved later on to only use tops and hoods for climbing
 			 		
