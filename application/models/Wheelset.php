@@ -136,6 +136,12 @@ class Wheelset extends MY_Model{
 	 	return $adjusted_CdA;
 	 }
 	 
+	 public function wind_cor_wheel_cda($wheel = NULL){
+	 	$wheel_drag = Wheelset_drag::find_by('wheelset_id', $wheel->id);
+	 	//Dummy calculate drag for zero
+	 	return $wheel_drag->deg0;
+	 }
+	 
 	 public function weighted_cda_averages($cda_data, $weighing_array){
 	 	
 	 	$cda =  $cda_data['cda_drops']*$weighing_array['drops'];
