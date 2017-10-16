@@ -115,6 +115,12 @@ class Wheels extends MY_Controller {
 	 			'type'=>'number');
 	 			
 	 			
+	 		$data['v_avg']=array(
+	 			'name'=>'v_avg',
+	 			'value'=>set_value('v_avg'),
+	 			'type'=>'number');
+	 			
+	 			
 	 		$data['amt_tops']=array(
 	 			'name'=>'amt_tops',
 	 			'id'=>'amt_tops',
@@ -163,6 +169,7 @@ class Wheels extends MY_Controller {
  	 			$this->form_validation->set_rules('rider_weight', 'Rider Weight', 'required|greater_than[0]');
 		 		$this->form_validation->set_rules('rider_height', 'Rider Height', 'required|greater_than[0]');
 		 		$this->form_validation->set_rules('bike_weight', 'Bike Weight', 'required|greater_than[0]');
+		 		$this->form_validation->set_rules('v_avg', 'Average Speed', 'required|greater_than[0]');
 		 		
 		 		if($this->form_validation->run()==FALSE){
 		 			//weather data fails
@@ -173,13 +180,14 @@ class Wheels extends MY_Controller {
 	
 		 		
 			 		$ride_data['density']= $this->wheelset->density($altitude, $Tair, $humidity);
-			 		$ride_data['climbing'] = $this->input->post('climbing');
+			 		$ride_data['climbing'] = feet2meters($this->input->post('climbing'));
 			 		$ride_data['distance'] = $this->input->post('distance');
 			 		$ride_data['bike_weight'] = $this->input->post('bike_weight');
 			 		//input in lbs
 			 		$ride_data['rider_weight'] = lbs2kg($this->input->post('rider_weight'));
 			 		//input in inches
 			 		$ride_data['rider_height'] = in2meters($this->input->post('rider_height'))*100;
+			 		$ride_data['v_avg'] = mph2ms($this->input->post('v_avg'));
 			 		
 			 		$cda_data = $this->wheelset->estimate_rider_cda($ride_data['rider_weight'], $ride_data['rider_height']);
 			 		

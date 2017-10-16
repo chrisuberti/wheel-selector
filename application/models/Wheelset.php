@@ -116,22 +116,57 @@ class Wheelset extends MY_Model{
 	 public function calculate_work($data=NULL, $wheelsets = NULL){
 	 	echo "HELLO THERE CHILDREN, I just ran the work calc function";
 	 	$data['rho']=$data['density']['rho_actual'];
-	 	$adjusted_CdA = array();
+	 	
+	 	//create variables to fill out with results
+	 	$results = array();
+	 	
+	 	
+	 	$baselinewheel = Wheelset::find_by_id(1);
+	 	//Recall wheel ID = 0 is ALWAYS 1
 	 	foreach($wheelsets as $wheel){
-	 		$adjusted_CdA[$wheel->id] =$this->wheel_adjust_cda($wheel, $baselinewheel);
+	 		$id = $wheel->id;
+	 		$adjusted_CdA =$this->wheel_adjust_cda($wheel, $data['timeWeighted_CdA'], $baselinewheel);
+	 		
+	 		
+	 		$total_weight = $data['bike_weight']+$data['rider_weight']+$wheel->weight;
+	 		
+	 		$w_climb = $total_weight * GRAVITY * $data['climbing'];
+	 	
+	 		$w_wind=(1/2) * $data['rho'] * pow($data['v_avg'], 2) * $adjusted_CdA * $data['distance'];
+	 		$w_tot=$w_climb+$w_wind;
+	 		$pow_avg = $w_tot/(($data['distance']/1000/($data['v_avg']/0.2777778))*3600);
+	 		
+	 		//populate wheel-indexed array of all the data to output
+	 		$results[$id] = array(
+	 			'pow_avg' => $pow_avg,
+	 			'w_tot' => $w_tot,
+	 			'w_climb' => $w_climb,
+	 			'tot_weight' => $total_weight,
+	 			'CdA' => $adjusted_CdA);
+	 		
+	 		//$total_weights[$wheel->id] = $this-
 	 	}
+	 	preprint($results);
 	 	preprint($data);
 	 	preprint($wheelsets);
 	 }
 	 
 	 
 	 //This is a way to adjust how each wheelset impacts 
-	 public function wheel_adjust_cda($wheel = NULL, $baselinewheel = NULL){
+	 public function wheel_adjust_cda($wheel = NULL, $riderCdA = NULL, $baselinewheel =NULL){
 	 	//need to figure out what baseline CdA is
 	 	//subtract the baseline cda from time weighted cda
 	 	//Add new wheelset cda to the time weighted $cda
 	 	
 	 	$wind_adjusted_wheel_cda = $this->wind_cor_wheel_cda($wheel);
+
+	 	$wind_adjusted_baselinewheel_cda = $this->wind_cor_wheel_cda($baselinewheel);
+	 	
+	 	//Add adjustments to compensate for front/wheel rear compensation
+	 	//current calculation just does the calculation adjustemt for a wheel by iteslf in
+	 	//wind tunnel
+	 	
+	 	$adjusted_CdA = $riderCdA - $wind_adjusted_baselinewheel_cda + $wind_adjusted_wheel_cda;
 	 	
 	 	return $adjusted_CdA;
 	 }

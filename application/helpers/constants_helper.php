@@ -23,6 +23,11 @@ function in2meters($in){return $in/12*0.3048;}
 function inHg2kPa($p){return $p*3.38639;}
  
  
+ //convert mph to m/s
+function mph2ms($mph){return $mph*0.44704;}
+ 
+ 
+  
 //Conbert lbs to kilograms
 
 function lbs2kg($lbs){return $lbs*0.453592;}

@@ -56,6 +56,11 @@
                         <td><?php echo form_input($distance);?></td>
                     </tr>
                     
+                     <tr>
+                        <td><?php echo form_label('Speed (avg, mph): ', 'v_avg');?></td>
+                        <td><?php echo form_input($v_avg);?></td>
+                    </tr>
+                    
                     <tr>
                         <td><?php echo form_label('Climbing (feet): ', 'climbing');?></td>
                         <td><?php echo form_input($climbing);?></td>
