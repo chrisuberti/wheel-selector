@@ -89,15 +89,8 @@ class Wheels extends MY_Controller {
 			}
 			//$data['wheelset_options']['value'] = set_value('wheelset_options');
 			
-			preprint($data['wheelset_options']);
 			
 			
-	 		//$data['wheelset_options']=array(
-	 		//	'44mm'=>'44mm Boyd',
-	 		//	'60mm'=>'60mm Boyd',
-	 		//	'90mm'=>'90mm Boyd',
-	 		//	'value'=>set_value('wheelset_options')
-	 		//	);
 	 		$data['ride_type_options']=array(
 	 			'solo'=>'Solo Ride',
 	 			'group'=>'Group Ride',
@@ -195,16 +188,11 @@ class Wheels extends MY_Controller {
 			 		$pos_time['tops']=substr($this->input->post('amt_tops'), 0, -1);
 			 		$pos_time['tt']=0.0;
 			 		
-			 		preprint($pos_time);
+			 		//Calculate a time weighted CdA value for the entire ride
+			 		$ride_data['timeWeighted_CdA']=$this->wheelset->weighted_cda_averages($cda_data, $pos_time);
+			 		//This should be improved later on to only use tops and hoods for climbing
 			 		
-			 		
-			 		
-			 		
-			 		$cda = $this->wheelset->weighted_cda_averages($cda_data, $pos_time);
-			 		preprint($cda_data);
-			 		preprint($cda);	 
-			 		
-			 		$work_req = $this->wheelset->calculate_work($ride_data);
+			 		$work_req = $this->wheelset->calculate_work($ride_data, $wheelsets);
 			 		
 			 	
 		 			

@@ -113,10 +113,28 @@ class Wheelset extends MY_Model{
 	 		
 	 		
 	 		
-	 public function calculate_work($data=NULL){
+	 public function calculate_work($data=NULL, $wheelsets = NULL){
 	 	echo "HELLO THERE CHILDREN, I just ran the work calc function";
+	 	$data['rho']=$data['density']['rho_actual'];
+	 	$adjusted_CdA = array();
+	 	foreach($wheelsets as $wheel){
+	 		$adjusted_CdA[$wheel->id] =$this->wheel_adjust_cda($wheel, $baselinewheel);
+	 	}
+	 	preprint($data);
+	 	preprint($wheelsets);
 	 }
 	 
+	 
+	 //This is a way to adjust how each wheelset impacts 
+	 public function wheel_adjust_cda($wheel = NULL, $baselinewheel = NULL){
+	 	//need to figure out what baseline CdA is
+	 	//subtract the baseline cda from time weighted cda
+	 	//Add new wheelset cda to the time weighted $cda
+	 	
+	 	$wind_adjusted_wheel_cda = $this->wind_cor_wheel_cda($wheel);
+	 	
+	 	return $adjusted_CdA;
+	 }
 	 
 	 public function weighted_cda_averages($cda_data, $weighing_array){
 	 	
