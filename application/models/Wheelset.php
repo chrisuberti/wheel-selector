@@ -114,7 +114,6 @@ class Wheelset extends MY_Model{
 	 		
 	 		
 	 public function calculate_work($data=NULL, $wheelsets = NULL){
-	 	echo "HELLO THERE CHILDREN, I just ran the work calc function";
 	 	$data['rho']=$data['density']['rho_actual'];
 	 	
 	 	//create variables to fill out with results
@@ -139,19 +138,14 @@ class Wheelset extends MY_Model{
 	 		//populate wheel-indexed array of all the data to output
 	 		//also change the work values to kJ instead of just jules
 	 		$results[$id] = array(
-	 			'pow_avg' => $pow_avg,
-	 			'w_tot' => $w_tot/1000,
-	 			'w_climb' => $w_climb/1000,
+	 			'pow_avg'	=> $pow_avg,
+	 			'w_tot' 	=> $w_tot/1000,
+	 			'w_climb'	=> $w_climb/1000,
+	 			'w_air' 	=> $w_wind/1000,
+	 			'weight'	=> $total_weight,
 	 			'tot_weight' => $total_weight,
-	 			'CdA' => $adjusted_CdA);
-	 		
-	 		//$total_weights[$wheel->id] = $this-
+	 			'CdA'		=> $adjusted_CdA);
 	 	}
-	 	
-	 	preprint($results);
-	 	preprint($data);
-	 	preprint($wheelsets);
-	 	
 	 	return $results;
 	 }
 	 
@@ -181,7 +175,6 @@ class Wheelset extends MY_Model{
 	 
 	 public function wind_cor_wheel_cda($wheel = NULL){
 	 	$wheel_drag = Wheelset_drag::find_by('wheelset_id', $wheel->id);
-	 	preprint($wheel_drag);
 	 	//Dummy calculate drag for zero
 	 	return $wheel_drag->deg0;
 	 }

@@ -25,7 +25,7 @@
                 <table>
 
                     <tr>
-                        <?php echo form_open('wheels');?>
+                        <?php echo form_open('calc');?>
                         <td><?php echo form_label('Enter Zip Code: ', 'zip_code');?></td>
                         <td><?php echo form_input($zip_code);?></td>
                        
@@ -34,7 +34,7 @@
                         <td><p><?php echo form_submit(array('name'=>'weather_submit', 'value'=>'Get Weather'));?></p></td>
                           <?php form_close();?>
                     </tr>
-                    <?php echo form_open_multipart('wheels/index');?>
+                    <?php echo form_open_multipart('calc/index');?>
                     <tr><td><h3>Weather Metrics: </h3></td></tr>
                     <tr>
                         <td><?php echo form_label('Air Temperature (F): ', 'air_temp');?></td>
@@ -125,11 +125,14 @@
     <div class="row">
         <div class="col-md-4"></div>
          <div class="col-md-4">
-             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels', 'class'=>'btn btn-primary'));?></td>
+             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'calc', 'class'=>'btn btn-primary'));?></td>
         </div>
         <div class="col-md-4"></div>
              
                     
+    </div>
+    <div class="row">
+        <?php echo $output_table;?>
     </div>
 </div>
 

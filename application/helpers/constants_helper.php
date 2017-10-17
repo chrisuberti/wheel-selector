@@ -10,7 +10,8 @@
 //P_SEALEVEL = 101.33; //Sea Level standard pressure kPa//
 //
 
-
+//Generally format number
+function pretty_num($num){return number_format($num, 1, '.', ',');}
 
 //convert meters to feet;
 function feet2meters($ft){return $ft*0.3048;}
