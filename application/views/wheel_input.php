@@ -1,3 +1,7 @@
+<?php $this->load->view('dressings/header');?>
+
+<?php if($logged_in){$this->load->view('dressings/navbar');} ?>
+
 <body>
 <div id="page-wrapper">
     <div class="row">
@@ -13,7 +17,7 @@
                 if(validation_errors()){echo validation_errors('<p class = "error">','</p>');}
                 echo  ($this->session->flashdata('message'));
                // preprint($this->session->flashdata('weather_data'));
-                echo anchor('wheels', "Go to All Wheels");
+                echo anchor('wheels/all_wheelsets', "Go to All Wheels");
             ?>
          
             
@@ -112,17 +116,18 @@
 
                 </table>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 This is a test
             </div>
         </div>
 
-
+    
     <div class="row">
         <div class="col-md-4"></div>
          <div class="col-md-4">
-             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels'));?></td>
+             <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'wheels', 'class'=>'btn btn-primary'));?></td>
         </div>
+        <div class="col-md-4"></div>
              
                     
     </div>

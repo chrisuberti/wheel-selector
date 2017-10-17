@@ -5,14 +5,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Wheels extends MY_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 */
-	 
-	 function __construct(){
+	 public function __construct(){
 	 	parent::__construct();
 	 	$this->load->model(array('wheelset'));
-	 	$this->load->library(array('ion_auth','form_validation'));
+	 	$this->load->library(array('form_validation', 'table'));
 		$this->load->helper(array('url','language', 'constants', 'form'));
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
@@ -27,124 +23,35 @@ class Wheels extends MY_Controller {
 	 	
 	 
 	 public function index(){
-
-	 	
-	 	
-	 	$data['title']='Wheel Calculation Input';
-	 
-	 	
-	 	$data['air_temp']=array(
-	 			'name'=>'air_temp',
-	 			'type'=>'number',
-	 			'value'=>set_value('air_temp'),
-	 			'placeholder'=>'Current air temp'
-	 			
-	 		);
-	
-	 	$data['distance']=array(
-	 			'name'=>'distance',
-	 			'type'=>'number',
-	 			'value'=>set_value('distance')
-	 			
-	 		);
-	 	$data['climbing']=array(
-	 			'name'=>'climbing',
-	 			'type'=>'number',
-	 			'value'=>set_value('climbing')
-	 			
-	 		);
-	 		$data['altitude']=array(
-	 			'name'=>'altitude',
-	 			'type'=>'number',
-	 			'placeholder'=>'Altitude of segment',
-	 			'value'=>set_value('altitude')
-	 			
-	 		);
-	 		$data['humidity']=array(
-	 			'name'=>'humidity',
-	 			'type'=>'number',
-	 			
-	 			'placeholder'=>'Enter Relative Humidity',
-	 			'value'=>set_value('humidity')
-	 			
-	 		);
-	 		$data['bike_weight']=array(
-	 			'name'=>'bike_weight',
-	 			'type'=>'number',
-	 			'placeholder'=>'Minus Wheels',
-	 			'value'=>set_value('bike_weight')
-	 			
-	 		);
-	 		$data['wheelset']=array(
-	 			'name'=>'wheelset'
-	 		);
-	 		
-	 		
-	 		$wheelsets = $this->wheelset->find_all();
-	 		$data['wheelset_options'] = array();
-			if($wheelsets){
-				foreach($wheelsets as $wheel_info){
-					$data['wheelset_options'][$wheel_info->id]=$wheel_info->wheel_name;
-				}
-			}
-			//$data['wheelset_options']['value'] = set_value('wheelset_options');
-			
-			
-			
-	 		$data['ride_type_options']=array(
-	 			'solo'=>'Solo Ride',
-	 			'group'=>'Group Ride',
-	 			'value'=>set_value('wheelset_options')
-	 			);
-	 		$data['ride_type']=array(
-	 			'name'=>'ride_type',
-	 			);
-	 		$data['rider_weight']=array(
-	 			'name'=>'rider_weight',
-	 			'type'=>'number',
-	 			'value'=>set_value('rider_weight')
-	 		);
-	 		$data['rider_height']=array(
-	 			'name'=>'rider_height',
-	 			'type'=>'number',
-	 			'value'=>set_value('rider_height')
-	 		);
-	 		$data['zip_code']=array(
-	 			'name'=>'zip_code',
-	 			'value'=>set_value('zip_code'),
-	 			'type'=>'number');
-	 			
-	 			
-	 		$data['v_avg']=array(
-	 			'name'=>'v_avg',
-	 			'value'=>set_value('v_avg'),
-	 			'type'=>'number');
-	 			
-	 			
-	 		$data['amt_tops']=array(
-	 			'name'=>'amt_tops',
-	 			'id'=>'amt_tops',
-	 			'value'=>set_value('amt_tops')
-	 		);
-	 		
-	 		$data['amt_hoods']=array(
-	 			'name'=>'amt_hoods',
-	 			'id'=>'amt_hoods',
-	 			'type'=>'text',
-	 			'value'=>set_value('amt_hoods')
-	 		);
-	 		
-	 		$data['amt_drops']=array(
-	 			'name'=>'amt_drops',
-	 			'id'=>'amt_drops',
-	 			'type'=>'text',
-	 			'value'=>set_value('amt_drops')
-	 		);
-	 		
-	 		$data['all_wheelsets'] = Wheelset::find_all();
-	 	
-	 		
-	 			
+		if (!$this->ion_auth->logged_in()){
+			$data['logged_in']=FALSE;
+		}else{
+			$data['logged_in']=TRUE;
+		}
+	 	//Block of code dictating the input fields for the CI forms of wheels/input
+		$data['title']='Wheel Calculation Input';
+		$data['air_temp']=array('name'=>'air_temp','type'=>'number','value'=>set_value('air_temp'),'placeholder'=>'Currentairtemp');
+		$data['distance']=array('name'=>'distance','type'=>'number','value'=>set_value('distance'));
+		$data['climbing']=array('name'=>'climbing','type'=>'number','value'=>set_value('climbing'));
+		$data['altitude']=array('name'=>'altitude','type'=>'number','placeholder'=>'Altitudeo f segment','value'=>set_value('altitude'));
+		$data['humidity']=array('name'=>'humidity','type'=>'number','placeholder'=>'Enter Relative Humidity','value'=>set_value('humidit'));
+		$data['bike_weight']=array('name'=>'bike_weight','type'=>'number','placeholder'=>'Minus Wheels','value'=>set_value('bike_weight'));
+		$data['wheelset']=array('name'=>'wheelset');
+		$wheelsets=$this->wheelset->find_all();
+		$data['wheelset_options']=array();
+		if($wheelsets){foreach($wheelsets as $wheel_info){$data['wheelset_options'][$wheel_info->id]=$wheel_info->wheel_name;}}
+		$data['ride_type_options']=array('solo'=>'Solo Ride','group'=>'Group Ride','value'=>set_value('wheelset_options'));
+		$data['ride_type']=array('name'=>'ride_type');
+		$data['rider_weight']=array('name'=>'rider_weight','type'=>'number','value'=>set_value('rider_weight'));
+		$data['rider_height']=array('name'=>'rider_height','type'=>'number','value'=>set_value('rider_height'));
+		$data['zip_code']=array('name'=>'zip_code','value'=>set_value('zip_code'),'type'=>'number');
+		$data['v_avg']=array('name'=>'v_avg','value'=>set_value('v_avg'),'type'=>'number', 'placeholder'=>'Average Speed');
+		$data['amt_tops']=array('name'=>'amt_tops','id'=>'amt_tops','value'=>set_value('amt_tops'));
+		$data['amt_hoods']=array('name'=>'amt_hoods','id'=>'amt_hoods','type'=>'text','value'=>set_value('amt_hoods'));
+		$data['amt_drops']=array('name'=>'amt_drops','id'=>'amt_drops','type'=>'text','value'=>set_value('amt_drops'));
+		 
+	 	$data['all_wheelsets'] = Wheelset::find_all();
+	 	//Create function in controller to build out display table of drag metrics
 	 			
 	 	if(isset($_POST['weather_submit']) || isset($_POST['wheel_submit'])){
 		 	if(isset($_POST['zip_code']) && isset($_POST['weather_submit'])){
@@ -208,7 +115,7 @@ class Wheels extends MY_Controller {
 			 		
 			 		$work_req = $this->wheelset->calculate_work($ride_data, $wheelsets);
 			 		
-			 	
+			 		
 		 			
 		 		}
 		 	
@@ -218,7 +125,14 @@ class Wheels extends MY_Controller {
 
 	     
 		}
-		$this->load->view('dressings/header');
+		
+		//Create table of results form the work calc function (maybe create indepndent function within controller to do this)
+		if(isset($work_req)){
+			preprint($work_req);
+		}
+		
+		//Create plot function of wheelset data
+		
 	    $this->load->view('wheel_input', $data);
 	    $this->load->view('dressings/footer');
 	     

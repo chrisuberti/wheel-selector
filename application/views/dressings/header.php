@@ -13,7 +13,7 @@ $charts = 0;
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Paper Trading</title>
+    <title>Wheelset Tool</title>
 
     <!-- Bootstrap Core CSS -->
     <link href=<?php echo asset_url()."bower_components/bootstrap/dist/css/bootstrap.min.css";?> rel="stylesheet">

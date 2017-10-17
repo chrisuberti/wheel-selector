@@ -127,7 +127,7 @@ class Wheelset extends MY_Model{
 	 		$id = $wheel->id;
 	 		$adjusted_CdA =$this->wheel_adjust_cda($wheel, $data['timeWeighted_CdA'], $baselinewheel);
 	 		
-	 		
+	 		//echo $wheel->wheel_name;
 	 		$total_weight = $data['bike_weight']+$data['rider_weight']+$wheel->weight/1000;
 	 		
 	 		$w_climb = $total_weight * GRAVITY * $data['climbing'];
@@ -147,9 +147,12 @@ class Wheelset extends MY_Model{
 	 		
 	 		//$total_weights[$wheel->id] = $this-
 	 	}
+	 	
 	 	preprint($results);
 	 	preprint($data);
 	 	preprint($wheelsets);
+	 	
+	 	return $results;
 	 }
 	 
 	 
@@ -172,11 +175,19 @@ class Wheelset extends MY_Model{
 	 	return $adjusted_CdA;
 	 }
 	 
+	 
+	 
+	 
+	 
 	 public function wind_cor_wheel_cda($wheel = NULL){
 	 	$wheel_drag = Wheelset_drag::find_by('wheelset_id', $wheel->id);
+	 	preprint($wheel_drag);
 	 	//Dummy calculate drag for zero
 	 	return $wheel_drag->deg0;
 	 }
+	 
+	 
+	 
 	 
 	 public function weighted_cda_averages($cda_data, $weighing_array){
 	 	
