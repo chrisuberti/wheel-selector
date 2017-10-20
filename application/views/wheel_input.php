@@ -117,12 +117,13 @@
                 </table>
             </div>
             <div class="col-md-4">
-                This is a test
+                
             </div>
         </div>
 
     
     <div class="row">
+        <br>
         <div class="col-md-4"></div>
          <div class="col-md-4">
              <?php echo form_submit(array('name'=>'wheel_submit', 'value'=>'Calculate', 'formaction'=>'calc', 'class'=>'btn btn-primary'));?></td>
@@ -132,7 +133,9 @@
                     
     </div>
     <div class="row">
-        <?php echo $output_table;?>
+        <?php if(isset($output_table)){
+        echo "<br><h3>Work Comparison Table: </h3>" . $output_table;
+        }?>
     </div>
 </div>
 

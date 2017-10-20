@@ -85,7 +85,7 @@ class Calc extends MY_Controller {
 		 	}
 		}
 		//Create table of results form the work calc function (maybe create indepndent function within controller to do this)
-		if(isset($work_req)){ $data['output_table'] = $this->output_table_gen($work_req);}
+		if(isset($work_req)){ $data['output_table'] = $this->output_table_gen($work_req, $ride_data['selected_wheelset']);}
 		
 		//Create plot function of wheelset data
 		
@@ -98,16 +98,16 @@ class Calc extends MY_Controller {
 	 
 	 
 	 
-	 public function output_table_gen($data = NULL){
+	 public function output_table_gen($data = NULL, $ref_ws_id = NULL){
 	     //ideally would like to make this table sortable -- for future reference
 	    $this->table->set_template(array('table_open'=>"<table class='table table-striped table-bordered table-hover' id='post_summary_table'>"));
 		$this->table->set_heading('Wheelset','Total Work (kJ)', 'Average Power (Watts)', 'Climbing Work (kJ)', 'Air Resistance Work (kJ)', 'Total Weight (kg)', 'CdA');
 		//Re-order array
-		$selected_id = $data['selected_wheelset'];
 		foreach($data as $id => $run_data){
 		    $the_wheelset = Wheelset::find_by_id($id);
 		    $wheel_name = $the_wheelset->wheel_name;
-		    //<tr class="success">...</tr>
+		    //<tr class="success">...</tr> 
+		    //might need to undue the CI table function to have a little more control over the inputs
 		    $this->table->add_row($wheel_name, pretty_num($run_data['w_tot']),pretty_num($run_data['pow_avg']),pretty_num($run_data['w_climb']),pretty_num($run_data['w_air']), pretty_num($run_data['tot_weight']),number_format($run_data['CdA'], 3, '.','' ));
 		}
 	    return $this->table->generate();
