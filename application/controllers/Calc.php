@@ -100,17 +100,36 @@ class Calc extends MY_Controller {
 	 
 	 public function output_table_gen($data = NULL, $ref_ws_id = NULL){
 	     //ideally would like to make this table sortable -- for future reference
-	    $this->table->set_template(array('table_open'=>"<table class='table table-striped table-bordered table-hover' id='post_summary_table'>"));
-		$this->table->set_heading('Wheelset','Total Work (kJ)', 'Average Power (Watts)', 'Climbing Work (kJ)', 'Air Resistance Work (kJ)', 'Total Weight (kg)', 'CdA');
-		//Re-order array
+	     $table = "<table data-toggle='table' class='table table-striped table-bordered table-hover' id='post_summary_table'><thead><tr>";
+	     $table .= "<th data-sortable = 'true'>Wheelset</th>";
+	     $table .= "<th data-sortable = 'true'>Total Work (kJ)</th>";
+	     $table .= "<th data-sortable = 'true'>Average Power (Watts)</th>";
+	     $table .= "<th data-sortable = 'true'>Climbing Work (kJ)</th>";
+	     $table .= "<th data-sortable = 'true'>Air Resistance Work (kJ)</th>";
+	     $table .= "<th data-sortable = 'true'>Total Weight (kg)</th>";
+	     $table .= "<th data-sortable = 'true'>CdA</th>" . "</tr></head>";
+	     $table .= "<tbody>";
+	     
+	     //Re-order array
 		foreach($data as $id => $run_data){
 		    $the_wheelset = Wheelset::find_by_id($id);
 		    $wheel_name = $the_wheelset->wheel_name;
+		    if($id == $ref_ws_id){
+		    	$table .= "<tr class = 'success'>";
+		    }else{
+		    	$table .= "<tr>";
+		    }
+		    $table .= "<td>".$wheel_name."</td><td>".pretty_num($run_data['w_tot'])."</td><td>".pretty_num($run_data['pow_avg'])."</td><td>".pretty_num($run_data['w_climb']);
+		    $table .= "</td><td>".pretty_num($run_data['w_air'])."</td><td>".pretty_num($run_data['tot_weight'])."</td><td>".number_format($run_data['CdA'], 4, '.','' )."</td>";
+			$table .= "</tr>";
+			
+			
 		    //<tr class="success">...</tr> 
 		    //might need to undue the CI table function to have a little more control over the inputs
-		    $this->table->add_row($wheel_name, pretty_num($run_data['w_tot']),pretty_num($run_data['pow_avg']),pretty_num($run_data['w_climb']),pretty_num($run_data['w_air']), pretty_num($run_data['tot_weight']),number_format($run_data['CdA'], 3, '.','' ));
 		}
-	    return $this->table->generate();
+		$table .= "</tbody></table>";
+		
+		return $table;
 	 }
 	 
 	 

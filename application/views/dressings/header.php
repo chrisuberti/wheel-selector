@@ -39,6 +39,10 @@ $charts = 0;
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" type="text/css" />
     <link rel="stylesheet" href="/resources/demos/style.css" type="text/css" />
         <!-- Required for the range slider -->
+        
+    <!-- Latest compiled and minified CSS for enhanced bootsrap table -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
 
     <!-- Site specific Style sheet -->
     <link href=<?php echo asset_url()."css/main.css";?> rel="stylesheet">

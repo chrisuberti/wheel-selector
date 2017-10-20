@@ -176,7 +176,14 @@ class Wheelset extends MY_Model{
 	 public function wind_cor_wheel_cda($wheel = NULL){
 	 	$wheel_drag = Wheelset_drag::find_by('wheelset_id', $wheel->id);
 	 	//Dummy calculate drag for zero
-	 	return $wheel_drag->deg0;
+	 	//Setting wind angle irregardless of wind currently (just a rough estimate)
+	 	$sum_wheel_drag =
+	 		$wheel_drag->deg0 * 0.3 +
+	 		$wheel_drag->deg5 * 0.3 +
+	 		$wheel_drag->deg10 * 0.2 +
+	 		$wheel_drag->deg15 * 0.1 +
+	 		$wheel_drag->deg20 * 0.1;
+	 	return $sum_wheel_drag;
 	 }
 	 
 	 

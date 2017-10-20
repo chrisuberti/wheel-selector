@@ -206,13 +206,6 @@ class Wheels extends MY_Controller {
 	
     
      public function test(){
-    	$this->load->view('dressings/header');
-     	//echo ' 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>				<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>"';
-
-
-     	$this->load->view('test');
-     	$this->load->view('dressings/footer');
-		echo '<script src="'. asset_url().'js/slider.js"'. '\></script>';
 
      }
 

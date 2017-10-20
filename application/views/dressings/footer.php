@@ -12,7 +12,11 @@
     
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     
-
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+    
+    <!-- Latest compiled and minified Locales -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
 
        <!-- Custom Theme JavaScript -->
     <script src='<?php echo asset_url()."dist/js/sb-admin-2.js";?>'></script>
