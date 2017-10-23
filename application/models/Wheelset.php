@@ -126,8 +126,13 @@ class Wheelset extends MY_Model{
 	 		$id = $wheel->id;
 	 		$adjusted_CdA =$this->wheel_adjust_cda($wheel, $data['timeWeighted_CdA'], $baselinewheel);
 	 		
-	 		//echo $wheel->wheel_name;
-	 		$total_weight = $data['bike_weight']+$data['rider_weight']+$wheel->weight/1000;
+	 		//Tublar Adjustment
+	 		if($wheel->tubular){
+	 			$wheel_weight = ($wheel->weight+250*2)/1000; 
+	 		}else{
+	 			$wheel_weight = ($wheel->weight+(100+215)*2)/1000;
+	 		}
+	 		$total_weight = $data['bike_weight']+$data['rider_weight']+$wheel_weight;
 	 		
 	 		$w_climb = $total_weight * GRAVITY * $data['climbing'];
 	 	
