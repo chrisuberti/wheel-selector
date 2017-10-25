@@ -1,4 +1,4 @@
-  <?php
+<?php
 
 //General set of custom functions to be used for this project helper fiel
 function asset_url(){return base_url().'assets/';}
